@@ -1,0 +1,16 @@
+% Encoding: UTF-8
+
+@Book{intromachinelearn,
+  title =     {Introduction to Machine Learning, Second Edition},
+  publisher = {Cambridge},
+  year =      {2010},
+  author =    {Alpaydin, Ethem}
+}
+
+@Article{ref:RF_1,
+  author = {Leo Breiman},
+  title =  {Random Forests},
+  year =   {2001},
+  month =  {January},
+  url =    {https://www.stat.berkeley.edu/~breiman/randomforest2001.pdf}
+}
