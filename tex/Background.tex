@@ -1,11 +1,13 @@
 \chapter{Background}
 \section{MRIs}
 
-\section{MachineLearning}
+\section{Machine Learning}
 Machine learning is a method that gives computers the ability to solve solutions by learning from supplied data. Machine learning is getting increasingly important as the amount of data and variety grows. The applications of this method become more feasible as computer power gets more powerful and cheaper and algorithms become more advanced and efficient. 
+\\[1\baselineskip]
+Machine learning can have either classification or regression types of model and outputs depending on the application and algorithm. Classification outputs can be binary or multi-class. Where binary has two classes and the latter can have multiple. The algorithm will predict what class the data should belong to. Regression output is a continuous output, meaning a numeric value. This is often represented as a percentage or probability.  
 
 \subsection{Types of Machine Learning}
-There are various types of machine learning, some include:
+There are various types of machine learning, some include \cite{ref:ml_1}:
 \begin{itemize}
 	\item Supervised learning
 	\item Unsupervised learning
@@ -17,17 +19,44 @@ Given a scenario with two possible outcomes, supervised learning learns by being
 In contrast, in unsupervised learning, the algorithm is not given any targets or answers. Instead, it aims to find patterns and sequences that are present in the data. An example application for this type of learning is recommendation engines. Based on trends in browsing history for example, the model will be able to make a prediction on things that would be if similar interest.
 \\[1\baselineskip]
 Reinforcement learning learns through trial and error. It's output is dependent on a sequence of actions which maximise the end goal or reward. Applications which incorporate this type of learning are games, where the agent learns depending on the output of the environment.
-\subsection{Classification}
-\subsection{Regression}
-	overfitting and underfitting?
+
+\subsection{Overfitting and Underfitting}
+The model used to make predictions has to fit the data provided in order to make accurate predictions. There are two spectrum; overfitting and underfitting. The midpoint between the two would be the best case for developing a general and robust model. 
+\subsubsection{Overfitting}
+Overfitting is when a model is too adapted for the training data that was supplied. When making predictions on unseen data, the model will struggle to make accurate predictions as it is trained to predict accurately on the training data \cite{ref:ml_1}. Overfitting is often due to having too much data to learn from. Overfitting can be mitigated by reducing the amount of training data supplied. 
+
+\subsubsection{Underfitting}
+A model that is underfitted is unable to make accurate predictions on the test and training data \cite{ref:ml_1}. This is an indication that this is a poor model as it is not robust enough due to the lack of training data supplied. By increasing the number of training examples and features may counter this issue.   
+	
 \section{Random Forest}
 Random Forest is a machine learning algorithm that can give a classification or regression output. It is compromised of many decision trees - making it a forest.  Random forests are discriminative learners that rely on feature learning in order to conduct its classification or regression. 
-
+\\[1\baselineskip]
+In Random Forest, each individual tree grows by adding branches and leaves depending on the complexity of the problem. Each tree is grown to the largest extent possible. The maximum number of trees grown by the Random Forest is a parameter that can be defined. Each tree has an its own individual prediction. The Random Forest then chooses the prediction that has the most votes to be the output of the algorithm. 
+\todo[inline]{Benefits and limitations  of random forest}
 \subsection{Decision Trees}
-Decision trees are a way of mapping out possible decisions and their outcomes in a hierarchical structure 
-		\subsection{Classification}
-		\subsection{Regression}
+Decision trees are a way of mapping out possible decisions and their outcomes in a hierarchical structure. They are composed of internal decision nodes where each node has a test function and the output branches are possible outcomes of this test. The path taken along the branches are dependent on the output decision made at each node. The process starts at the root and repeats until a leaf node is hit. 
+
+\subsection{Training and Testing}
+The Random Forest process can be split into two main phases: training and testing. Both of these phases can be either classification or regression. 
+
+\subsubsection{Training}
+Training is where the decision trees are developed and grown to become the forest. They are developed based on the training examples and targets provided. Specifically to Random Forest, a portion of the data is left out during training in order to do the importance estimation of the model \cite{ref:rf_1}.  
+
+\subsubsection{Testing}
+Testing is where predictions are made based on the model created during the training phase. The aim of this phase is to gain an estimate on the accuracy of the model. This is done by supplying test data and comparing the models' prediction on this data against the appropriate targets. Again, the Random Forest can make classification and regression predictions. The testing data is run down each tree and each individual tree provides a prediction \cite{ref:rf_1}. The final output is determined by the maximum number of trees that had the same prediction. 
+ 
 \section{Features}
+Features of a digital image are calculated to give mathematical representation of certain aspects present. This is used to to teach the learning algorithm how to interpret the data supplied. The following features are within the scope of the project. 
+\subsection{Intensity}
+The intensity of an image is described by the grey-scale level value of each pixel. Where grey-scale ranges from 0 to 255. 
+\subsection{GLCM}
+\todo[inline]{can i reference matlab}
+Grey Level Co-Occurence is a texture feature that considers spatial relationships throughout the image. This is best for texture analysis, which is useful in this scope to determine between bone-like textures and non-bone-like textures. \cite{ref:glcm_1}
+\subsection{Gradient}
+Gradient accounts for the directional change in intensity within the image. This provides for a more in-depth analysis about the intensities present. \cite{ref:gradient_1} 
+\subsection{Entropy}
+The entropy feature describes the business and chaos of an image. Areas within the image that are non-flat are said to be busier than flat images as more information is needed to describe this. This feature will help detect shapes within the image. \cite{ref:ent_1}
+
 	\subsection{types of features}
 \section{Superpixels}
 \section{Morphology}
