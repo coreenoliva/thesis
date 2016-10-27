@@ -57,7 +57,61 @@ Gradient accounts for the directional change in intensity within the image. This
 \subsection{Entropy}
 The entropy feature describes the business and chaos of an image. Areas within the image that are non-flat are said to be busier than flat images as more information is needed to describe this. This feature will help detect shapes within the image. \cite{ref:ent_1}
 
-	\subsection{types of features}
 \section{Superpixels}
+Superpixels are a lattice of image patches that are aligned along the border found with an image. They are often used in image processing as pre-processing stages for image segmentation. These superpixel patches are uniform in certain image features such as intensity, colour and texture. This generally makes them originate from the same object within an image. \cite{ref:sp_2}
+\\[1\baselineskip]
+Their functional aim is to reduce computational load while retaining the same amount of information. The use of superpixel patches reduce the processing required; for example thousands of pixels down to hundreds. This contributes to the reduction in computational load and increasing speed. 
+\\[1\baselineskip]
+There are various algorithms that implement superpixel segmentation. One within the scope of this thesis is the SLIC algorithm. The SLIC algorithm clusters neighbouring pixels based on colour similarities and proximity within an image. \cite{ref:sp_1}
+ 
 \section{Morphology}
+Morphology in image processing are operations conducted on binary images with the use of structural elements. Morphology changes the structure and form of an image and are used to find boundaries and skeletons of an image or could be utilised for thinning or pruning edges. Morphology is a common pre or post processing stage in computer vision problems. However, they are limited to binary and greyscale images. 
+\subsubsection{Structural Element}
+A structural element defines the output shape of the morphology process. Various aspects of the structural element need to be considered when applying morphology. The shape of the structural element eludes to the edge of the output. The size of the structural element indicate how large the morphology operation will impact the image. Some shapes include:
+\begin{itemize}
+	\item Disc
+	\item Square
+	\item Diamond
+	\item Sphere
+	\item Cube
+\end{itemize}
+ \cite{ref:morph_3}.
+\subsection{Types of Morphology}
+There are various types of morphology operations to achieve different outputs depending on the application. The operations are conducted by convolution-type processes of the structural element on the image. The operations can be represented as mathematical equations where A is the image and B is the structural element.
+
+\subsubsection{Dilation}
+Dilation is commonly used to extend or expand boundaries found within an image. Dilation of an image can be described by equation below. 
+\begin{equation}
+A \oplus B = {x | \hat{B}_x \cap A }
+\label{eq:dilation}
+\end{equation} 
+In equation \ref{eq:dilation}, A is added with the reflection of B which is translated along the x axis. This expands the image as the pixels are being overlapped.
+
+\todo[inline]{need to add dilation image} 
+
+\subsubsection{Erosion}
+Contrary to dilation, erosion does the opposite. Erosion of an image trims or prunes down the edges found within the image. The equation for erosion is supplied below.
+\begin{equation}
+A \ominus B = {x | \hat{B}_x \cap A }
+\label{eq:erosion}
+\end{equation}
+The equation \ref{eq:erosion} above,  does the same translation and reflection of structural element, but instead subtracts it from the image. This ensures that the output image is contained within the original image A, trimming the edges of the image. 
+\todo[inline]{add erosion diagram}
+
+\subsubsection{Opening}
+Opening is the process of combining the erosion operation followed by dilation. This is often used to smooth out the contours of an image. This is done by first eroding out the rough edges with erosion and expanding it back close to its original size with dilation.
+\begin{equation}
+A \circ B = (A \ominus B) \oplus B
+\label{eq:open}
+\end{equation}
+
+\todo[inline]{insert diagram}
+\subsubsection{Closing}
+The closing morphology process conducts the dilation process followed by erosion. This operation is used to fill gaps and eliminate small holes within an image. By dilating the image, this causes small gaps to be filled. The erosion process after will reduce the number of individual small objects such as noise and specks.
+\begin{equation}
+A \bullet B = (A \oplus B) \ominus B
+\label{eq:close}
+\end{equation}
+\todo[inline]{insert diagram}
+
 \section{Statistics and Analysis}
