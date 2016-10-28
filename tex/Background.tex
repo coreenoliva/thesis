@@ -1,5 +1,9 @@
 \chapter{Background}
+The following chapter contains background and theory knowledge which have been applied throughout the thesis. 
 \section{MRIs}
+The purpose of medical imaging is to obtain information about the anatomy and physiological processes within the body. There are various methods that can be used to capture medical images. One of the most common types are Magnetic Resonance Imaging (MRI). MRIs are popular as they provide detailed images quickly. They are also flexibility in applications as it can capture many different anatomies of the body. \cite{ref:mri_1}
+\\[1\baselineskip] 
+MRIs are ideal for medical diagnosis and analysis as it has low noise in compared to other types of medical images and are highly detailed. Using the principle of Nuclear Magnetic Resonance, the machine induces the magnetic properties within the nuclei with a magnetic field. The machine then detects these signals and is able to form a 3D voxel based on this. MRIs can do more sophisticated analysis of the body as it is able to differentiate between tissues and show this representation accurately. \cite{ref:mri_2}
 
 \section{Machine Learning}
 Machine learning is a method that gives computers the ability to solve solutions by learning from supplied data. Machine learning is getting increasingly important as the amount of data and variety grows. The applications of this method become more feasible as computer power gets more powerful and cheaper and algorithms become more advanced and efficient. 
@@ -115,3 +119,32 @@ A \bullet B = (A \oplus B) \ominus B
 \todo[inline]{insert diagram}
 
 \section{Statistics and Analysis}
+There is a need to quantize the performance of a model. The performance of the classifier needs to be estimated and analysed in terms of how accurately it can predict the correct classification when given an unseen example.
+\\[1\baselineskip]
+In classification type outputs, there are four possible outcomes of the results. These are:
+\begin{itemize}
+	\item True Positive
+	\item False Positive
+	\item True Negative
+	\item False Negative
+\end{itemize} 
+True positive is when both the prediction result is accurately positive. False positive is when the prediction is positive on a negative example. True negative is when the prediction accurately predicts negative on a negative example. Lastly, false negative is when the prediction is negative on a positive example \cite{ref:ml_1}. 
+\\[1\baselineskip]
+After determining the number of each type output, the rates can be calculated to provide a further analysis of the performance. These rates are true positive rate and the true negative rate. These are also known as the sensitivity and specificity. 
+\begin{equation}
+\textrm{Sensitivty} = \frac{\textrm{True Positive}}{\textrm{Total Postives}}
+\label{eq:sensitivity}
+\end{equation}
+\\
+\begin{equation}
+\textrm{Specificity} = \frac{\textrm{True Negative}}{\textrm{Total Negatives}}
+\label{eq:specificity}
+\end{equation}
+\\
+Where sensitivity from equation \ref{eq:sensitivity} shows the percentage that the model is able to predict positives accurately and specificity \ref{eq:specificity} is the probability of correctly predicting negatives \cite{ref:stat_1}. From these rates, the total accuracy can also be calculated. The accuracy represents the percentage of the total samples that were accurately predicted, whether it be positive or negative. 
+\\
+\begin{equation}
+\textrm{Accuracy} = \frac{\textrm{True Postives} + \textrm{True Negatives}}{\textrm{Total Number}}
+\end{equation}
+\\
+Receiver Operating Characteristics (ROC) curves can be produced to visually represent the sensitivity versus specificity \cite{ref:ml_1}. This plot is used to compare varying parameters, which is useful in justifying and selecting optimal parameters.
