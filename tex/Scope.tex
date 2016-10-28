@@ -1,7 +1,34 @@
 \chapter{Scope}
-
-		
 \section{Topic Definition}
+This thesis aims to utilise machine learning and computer vision techniques in order to produce a bone segmentation scheme in MR images.
+A model will be devised with the use of the Random Forest algorithm and manually segmented images as a learning reference. 
+\\[1\baselineskip]
+There are numerous parameters and stages that contribute toward the performance of the model. As such, numerous experiments have been conducted in order to determine the optimal parameters and methods required. This will be done by analysing the contribution each aspect has towards the output of segmentation scheme. This analysis will be conducted with sensitivity, specificity rates and ROC curves to monitor progression. 
+
 \section{Aim}
-\section{Data}
+The following are the aims to be achieved:
+\begin{enumerate}
+	\item To produce a robust and accurate segmentation scheme for hip joints in MRIs.
+	\item To provide a solution that reduces the cost and time of manual segmentation while maintain and/or improving segmentation accuracy.
+\end{enumerate}
 \section{Resources}
+There are numerous resources required to conduct the investigations and research throughout the thesis. The resources are listed below in this section. 
+\subsection{Data}
+\todo{check this \#}Twenty-nine MR images of a hip joint have been used throughout the project. Each of these images have their corresponding labelled segmentation and mask. The labelled image is the manually segmented image and the mask is an indication of where the actual image lies within the boundaries. The usage split of this data will be covered in \todo{refer to method}.
+\todo[inline]{Provide image examples of this?}
+\subsection{Computing Resources}
+Various computing resources were utilised throughout this thesis. All computation was done on \todo{computer here}.
+\subsubsection{MATLAB}
+MATLAB was the opted program and language to devise the experimentation and methods in. The following toolboxes were implemented:
+\begin{enumerate}
+	\item \todo[inline]{toolbox list}
+\end{enumerate} 
+\subsubsection{Algorithms}
+\begin{enumerate}
+	\item  Machine learning algorithm: Random Forest
+	\item  Superpixel 
+\end{enumerate}
+Random Forest was the selected learning and prediction algorithm. For superpixel patches, the SLIC algorithm was used. 
+
+\subsection{Features}
+
