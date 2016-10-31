@@ -1,3 +1,63 @@
 \chapter{Method}
+\label{chpt: method}
+
+Chapter \ref{chpt: method} outlines all the procedures and methods that were undertaken to conduct the investigations and experiments. 
+
 \section{General Approach}
+Producing a segmentation approach was tackled in two main phases; the training and testing stage. For each of these stages, numerous experiments were conducted to find optimal parameters and procedures. Sections \ref{sect: trainstage} and \ref{sect: teststage} provide the general methods for each training and testing phase respectively.
+
+\subsection{Environment}
+An environment set up and initialisation was first done. The environment requires the paths to image directories, source functions, libraries and output directories. The environment is set up the same way for both training and testing phases with their corresponding output directories. The file contents for image directories were outputted for ease of access when loading them.  
+\todo{fIX THIS} 
+\begin{lstlisting}
+
+%% Initalise Directories 
+%Image paths
+addpath('Image paths');
+\textrm{\vdots}
+
+%Library paths
+addpath('library paths');
+
+%Create list of all files in each image directory
+
+% list all image files
+filelist=dir('image_path'); 
+% list all bone label files
+labellist=dir('label_path');
+%list all mask files 
+masklist=dir('mask_path'); 
+\end{lstlisting}
+
+\subsection{Training Stage} 
+\label{sect: trainstage}
+The method for conducting the training phase can be seen in figure \ref{fig: trainflow} below. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale = 0.65]{fig/trainingflow.png}
+\label{fig: trainflow}
+\caption{Flowchart outlining training phase procedure.}
+\end{figure}
+
+\subsubsection{Loading Images} 
+The training phase requires the training set of images and their corresponding labelled images and masks. These images are loaded using the NIfTI tools package \cite{ref:nifti_1} for MATLAB. Pseudo code shown below as an example. 
+\begin{lstlisting}
+%Index filelist for image
+get_image = fullfile('image_path', filelist(i).name);
+get_label = fullfile('label_path', labellist(i).name);
+get_mask =  fullfile('mask_path', masklist(i).name);
+    
+%Loading nii image, label, and mask
+load_image = load_nii(get_image);
+load_label = load_nii(get_label);
+load_mask = load_nii(get_mask); 
+\end{lstlisting}
+
+
+
+\subsection{Testing Stage}
+\label{sect: teststage}
+\todo[inline]{flow chart of testing}
+
 \section{Tests}

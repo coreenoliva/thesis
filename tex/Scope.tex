@@ -1,4 +1,6 @@
 \chapter{Scope}
+\label{chpt: scope}
+Chapter \ref{chpt: scope} provides an outline on the scope of the thesis and detailed lists of the resources used throughout. 
 \section{Topic Definition}
 This thesis aims to utilise machine learning and computer vision techniques in order to produce a bone segmentation scheme in MR images.
 A model will be devised with the use of the Random Forest algorithm and manually segmented images as a learning reference. 
@@ -18,6 +20,10 @@ There are numerous resources required to conduct the investigations and research
 \todo[inline]{Provide image examples of this?}
 \subsection{Computing Resources}
 Various computing resources were utilised throughout this thesis. All computation was done on \todo{computer here}.
+\\[1\baselineskip]
+Work was stored on a local disk which was backed up by Google Drive. Further back-ups were made on an external hard drive for additional measures. Research, notes and discussions were stored using One Note.
+\\[1\baselineskip]
+As MRIs are stored as .nii files, specific programs are required in order to view and open these files. SMILI \todo{ref this} was used to view and overlay .nii files as required. 
 \subsubsection{MATLAB}
 MATLAB was the opted program and language to devise the experimentation and methods in. The following toolboxes were implemented:
 \begin{enumerate}
@@ -28,7 +34,32 @@ MATLAB was the opted program and language to devise the experimentation and meth
 	\item  Machine learning algorithm: Random Forest
 	\item  Superpixel 
 \end{enumerate}
-Random Forest was the selected learning and prediction algorithm. For superpixel patches, the SLIC algorithm was used. 
+Random Forest was the selected learning and prediction algorithm. For superpixel patches, the SLIC algorithm was used. \
+\todo[inline]{include feature extraction scripts?}
 
 \subsection{Features}
+Feature extraction was conducted to be utilised by the Random Forest. A total of 25 features were extracted as listed in table \ref{table: feature} below. The choice of features extracted remained constant throughout the thesis. The features were selected based on findings from \todo[inline]{ref last year thesis here}. 
 
+\begin{table}[H]
+\centering
+\caption{List of features calculated.}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Intensity} & \textbf{Gradient} & \textbf{GLCM} & \textbf{Entropy}\\
+\hline
+Mean					 &	$\sum L_1$ 					&	Contrast $L_1$		&	Entropy\\
+Median				 &	$\sum L_2$					&	Contrast $L_2$		&\\
+Standard Deviation	 &  Mean of $L_1$				&	Correlation $L_1$	&\\
+Minimum 				 &	Mean of $L_2$				& 	Correlation $L_2$	&\\
+Maximum 				 &  	Standard Deviation of $L_1$ 	&	Energy $L_1$		 	&\\ 
+Interquartile		 &  Standard Deviation of $L_2$	&	Energy $L_2$			&\\
+				     &  Median 						& 	Homogeneity $L_1$	&\\
+				   	 &  Minimum						& 	Homogeneity $L_2$	&\\
+				    	 & 	Maximum 						& 						&\\ 
+				    	 &	Interquartile of $L_1$		&						&\\
+\hline				    	 			   			    	 
+\end{tabular}
+\label{table: feature}
+
+\end{table}
