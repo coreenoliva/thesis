@@ -16,29 +16,49 @@ The following are the aims to be achieved:
 \section{Resources}
 There are numerous resources required to conduct the investigations and research throughout the thesis. The resources are listed below in this section. 
 \subsection{Data}
-\todo{check this \#}Twenty-nine MR images of a hip joint have been used throughout the project. Each of these images have their corresponding labelled segmentation and mask. The labelled image is the manually segmented image and the mask is an indication of where the actual image lies within the boundaries. The usage split of this data will be covered in \todo{refer to method}.
-\todo[inline]{Provide image examples of this?}
+\todo{check this \#}Twenty-nine MR images of a hip joint have been used throughout the project. Each of these images have their corresponding labelled segmentation and mask. Example of the image and corresponding label can be seen in figure \ref{fig:dataex} The labelled image is the manually segmented image and the mask is an indication of where the actual image lies within the boundaries. The usage split of this data will be covered in \todo{refer to method}.
+
+\begin{figure}[H]
+    \centering
+    \subfloat[MRI of bone]{{\includegraphics[width=5cm]{fig/scope_bone.png} }}
+    \qquad
+    \subfloat[Label image of MRI]{{\includegraphics[width=5cm]{fig/scope_label.png} }}
+    \caption{MRI and corresponding label image.}%
+    \label{fig:dataex}
+\end{figure}
+
+
 \subsection{Computing Resources}
-Various computing resources were utilised throughout this thesis. All computation was done on \todo{computer here}.
+Various computing resources were utilised throughout this thesis. All computation was done on ac Acer Aspire E5-571G laptop with 8.00 GB of RAM and running on Windows 10.
 \\[1\baselineskip]
 Work was stored on a local disk which was backed up by Google Drive. Further back-ups were made on an external hard drive for additional measures. Research, notes and discussions were stored using One Note.
 \\[1\baselineskip]
 As MRIs are stored as .nii files, specific programs are required in order to view and open these files. SMILI \todo{ref this} was used to view and overlay .nii files as required. 
 \subsubsection{MATLAB}
 MATLAB was the opted program and language to devise the experimentation and methods in. The following toolboxes were implemented:
+\todo[inline]{need to provide references for this}
 \begin{enumerate}
-	\item \todo[inline]{toolbox list}
+	\item Image Processing Toolbox
+	\item Statistics Toolbox
 \end{enumerate} 
-\subsubsection{Algorithms}
+\subsubsection{Algorithms and Libraries}
 \begin{enumerate}
-	\item  Machine learning algorithm: Random Forest
-	\item  Superpixel  -- slico used because simpler, less options, compactness factor calculated automatically, better suited for texture and non-texture regions. there are disadvantages (slow and more memory usage but this was deemed to be negligble ) 
-	
-	\item  Feature Extraction
+	\item  NIfTI processor: Tools for NIfTI and ANALYZE image.
+	\item  Machine learning algorithm: Random Forest (Matlab implementation).
+	\item  Superpixel: SLICO Superpixels.
+	\item  Feature Extraction: Supplied feature calculating scripts. \todo{how to do this properly}
 \end{enumerate}
-\todo[inline]{Instructions on how the algorithms are used, parameters etc.}
-Random Forest was the selected learning and prediction algorithm. For superpixel patches, the SLIC algorithm was used. \
-\todo[inline]{include feature extraction scripts?}
+
+The images supplied were NIfTI formatted. An external Matlab library was required in order to handle the processing of NIfTI files. Tools for NIfTI and  ANALYZE image was selected was it had good documentation and was easy to use for the functionality that was required from it.
+\\[1\baselineskip]
+Random Forest was the selected learning and prediction algorithm. They are ideal for application with this challenge as they are discriminative and powerful. 
+\todo[inline]{FINISH THIS} 
+
+For superpixel patches, the SLICO algorithm was used. 
+\todo[inline]{why dis}
+Feature extraction was conducted with a supplied scripts and functions.
+
+
 
 \subsection{Features}
 \label{sect:features}

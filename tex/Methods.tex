@@ -109,10 +109,28 @@ The output of the feature extraction is a cell containing the features which was
 features = calculate_features.fea;
 \end{lstlisting}
 
+\pagebreak
 \section{General Approach}
-Producing a segmentation approach was tackled in two main phases; the training and testing stage. For each of these stages, numerous experiments were conducted to find optimal parameters and procedures. Sections \ref{sect: trainstage} and \ref{sect: teststage} provide the general methods for each training and testing phase respectively.
+Producing a segmentation approach was tackled in two main phases; the training and testing stage. The overall general process can be seen below in figure \ref{fig:training_testing_flow}. For each of these stages, numerous experiments were conducted to find optimal parameters and procedures. 
 
-\section{Environment}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{fig/training_testing.png}
+\caption{General flow chart of training and testing method.}
+\label{fig:training_testing_flow}
+\end{figure}
+
+\section{Pre-Training and Pre-Testing}
+The loading of images, superpixel patch production and feature extraction need to be done prior to the Random Forest processing for both training and testing phases. Both phases have similar aspects such as environment set up, image loading and preparation, superpixel generation and feature extractions - pre-training and pre-testing phases. Figure \ref{fig:prestages} gives an outline as to the process that occur in these initial phases. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{fig/prestages.png}
+\caption{Process of pre-training and pre-testing stages.}
+\label{fig:prestages}
+\end{figure}
+
+\subsection{Environment}
 An environment set up and initialisation was first done. The environment requires the paths to image directories, source functions, libraries and output directories. The environment is set up the same way for both training and testing phases with their corresponding output directories. The file contents for image directories were outputted for ease of access when loading them.  This is shown below with pseudo directories.
 
 \begin{lstlisting}[escapeinside={(*}{*)}]
@@ -133,29 +151,9 @@ labellist=dir('label_path');
 masklist=dir('mask_path'); 
 \end{lstlisting}
 
-\section{Training Stage} 
-\label{sect: trainstage}
-The method for conducting the training phase can be seen in figure \ref{fig: trainflow} below. The phase is split in to pre-training stage and training stage.
-
-\begin{figure}[H]
-\centering
-\includegraphics[scale = 0.65]{fig/training_flow.png}
-\label{fig: trainflow}
-\caption{Flowchart outlining training phase procedure.}
-\end{figure}
-
-The loading of images, superpixel production and features all need to be done first prior to the random forest training, making up the pre-training stage. The pre-training process highlighted in figure \ref{fig: flowtrainload} is repeated for the number of training images set. 
-
-\begin{figure}[H]
-
-\includegraphics[scale=0.6]{fig/loadtrainflow.png}
-\label{fig: flowtrainload}
-\caption{Flowchart of pre-training stage.}
-\end{figure}
-
 
 \subsection{Loading Images} 
-The training phase requires the training set of bone images and their corresponding labelled images and masks. These 3D images are loaded using the NIfTI tools package \cite{ref:nifti_1} for MATLAB. Pseudo directories amongst code shown below as an example. 
+Both training and testing phases require the training set of bone images and their corresponding labelled images and masks. These 3D images are loaded using the NIfTI tools package \cite{ref:nifti_1} for MATLAB. Pseudo directories amongst code shown below as an example. 
 \begin{lstlisting}
 %Index filelist for image
 get_image = fullfile('image_path', filelist(i).name);
@@ -173,10 +171,8 @@ full_label = load_label.img;
 full_mask = load_mask.img;
 \end{lstlisting}
 
-
-\medskip
+\bigskip
 The middle 2D slice of the bone, label and mask images are obtained by calculating the middle index along the z dimension. It should also be noted that the image intensities are scaled to be positive values. \todo{why does this need to be positive} 
-
 \begin{lstlisting}
 %Calculating the middle index
 mid = size(full_label,3)/2;
@@ -206,12 +202,18 @@ A superpixel lattice is generated for the 2D bone image slice using the SLIC sup
 [labels, numlabels] = slicomex(img, N_superpixels);
 imlabels = imagesc(labels);
 pixels = imlabels.CData;
-
 \end{lstlisting}
-The colour labels as seen in figure \todo{insert figure ref} is the output of the generated superpixel lattice where each colour represents a patch generated.
-\\[1\baselineskip]
-\todo[inline]{colour label image}
-\vspace{60mm}
+\bigskip
+
+The colour labels as seen in figure \ref{fig:colourmap} is the output of the generated superpixel lattice where each colour represents a patch generated.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{fig/colourmap.png}
+\caption{Colour map produced from SLICO superpixel.}
+\label{fig:colourmap}
+\end{figure}
+
 The image coordinates for each patch can then be calculated using this information. This is done by iterating through the total number of patches created and translating its linear index to the image subscripts. Coordinates are extracted from the bone image superpixel and the same coordinates are used to extract the labelled image patch. Each patch is checked against the mask image and removed if it is located outside the mask, ie. when the mask is 0. Patches are then stored in corresponding image and label cells.
 
 \begin{lstlisting}
@@ -233,17 +235,60 @@ end
 \end{lstlisting} 
 
 \subsection{Feature Extraction}
-Features are extracted from the bone patches based on when the label patch contains bone. The features extracted were listed in \ref{sect:features} and the set up to begin extraction can be seen in
+Features are extracted from the bone patches based on when the label patch contains bone. The features extracted were listed in \ref{sect:features} and the set up to prepare the feature extractions was outlined in \ref{sect:calcFeature}. Once the features were calculated, they are saved in a matrix. 
+\begin{lstlisting}
+%Calculating features
+calculate_features = calcFeature(label_patches{num_patches},...
+					patches{num_patches},tempf);
 
+%Extracting features
+temp = calculate_features.fea;
+
+%Saving features in feature matrix
+features(num_patches, 1:length(temp)) = temp;
+\end{lstlisting}
+\medskip
+
+Once all the features of all the patches of all the images were calculated, this produced a matrix of size $[\textrm{total number of patches} \times 25]$, where each row represented each feature. 
+
+\subsection{Target Vector Creation}
+The final process of the preparation stages is to produce a target vector based off the corresponding label for the current image. For training, the target vector was required for Random Forest training. For the testing phase, the target vector was used to determine and analyse the accuracy of the predictions. Although the target vector was used differently by the training and testing phases, they are created the same way in the preparation stage so as to minimise computations. The size of the target vector is $[1 \times \textrm{number of patches}$. 
+\\[1\baselineskip]
+As superpixel patches are a cluster of individual pixels, there may be patches that contain both bone and non-bone matter. If the patch contains any bone, it is labelled as bone, else the patch has to have no bone at all to be classified as non-bone. Bones are labelled as 1's and non bone's as 0's as outlined in the process flowchart in figure \ref{fig:targetvectorflow}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{fig/targetvectorflow.png}
+\caption{Flowchart of processes to produce target vector.}
+\label{fig:targetvectorflow}
+\end{figure}
+
+The code used to simulate this process can be seen below.
 
 \begin{lstlisting}
-
+%% Producing Target Vector
+for num_patches = 1:numlabels %Iterate through number of labels
+    if sum(label_patches{num_patches}) == 0
+        target(num_patches, 1) = 0;
+    else 
+        target(num_patches, 1) = 1;
+    end
+end
 \end{lstlisting}
 
 
+\section{Training Stage} 
+\label{sect: trainstage}
+The training stage as seen in \ref{fig:training_testing_flow} comes after the pre-training stage. Figure \todo{reference figure here} outlines a detailed process of the training stage. 
 
-\subsubsection{Target Vector Creation}
-\subsection{Testing Stage}
+\begin{figure}[H]
+\includegraphics[scale=0.6]{fig/loadtrainflow.png}
+\caption{Flowchart of pre-training stage.}
+\label{fig: flowtrainload}
+\end{figure}
+
+
+\section{Testing Stage}
 \label{sect: teststage}
 \todo[inline]{flow chart of testing}
 
