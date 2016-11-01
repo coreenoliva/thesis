@@ -3,18 +3,122 @@
 
 Chapter \ref{chpt: method} outlines all the procedures and methods that were undertaken to conduct the investigations and experiments. 
 
+\section{Algorithm Usage}
+Various algorithms and supplied scripts were used throughout the stages of the method. This section will describe the usage and the outputs of each algorithm.
+\subsection{NIfTI} 
+\label{sect:nifti}
+The NIfTI MATLAB package is used to handle NIfTI formatted images. This package allows for functions such as:
+\begin{itemize}
+	\item Load NIfTI files
+	\item Make an image into a NIfTI file
+	\item Save NIfTI file
+\end{itemize}
+
+The functions mentioned above have the following definitions.
+\begin{lstlisting}
+%Load nii usage
+nii = load_nii(filename, [img_idx], [dim5_idx], [dim6_idx], ...
+			[dim7_idx], [old_RGB], [tolerance], [preferredForm])
+			
+%Make nii usage
+nii = make_nii(img, [voxel_size], [origin], [datatype],...
+ 			[description])
+
+%Save nii usage
+save_nii(nii, filename, [old_RGB])
+\end{lstlisting}
+
+\subsection{Random Forest} 
+The Random Forest algorithm for MATLAB has both classification and regression scripts for training and prediction functions. Regression and classification functions both take in the same parameters. 
+\subsubsection{Training}
+\label{sect:rf_training}
+The classification and regression training functions are defined as:
+\begin{lstlisting}
+%RF Classification training
+function model = classRF_train(X,Y,ntree,mtry, extra_options)
+
+%RF Regression training
+function model = regRF_train(X,Y,ntree,mtry, extra_options)
+\end{lstlisting}
+\medskip
+Where X is the data matrix, Y are the target values, ntree is the number of trees to grow and mtry represents the number of remaining predictor values to use. mtry has been set to 20 all throughout. Extra options such as importance and proximity calculations have been utilised. The importance option provides an estimate on the level of contribution of each feature.
+\begin{lstlisting}
+%Set up of RF training parameters
+mtry = 20;
+extra_options.importance = 1;
+extra_options.proximity = 1;
+\end{lstlisting}
+The output of the training functions returns a model which is a struct to be used for creating predictions. This struct contains the following information:
+\begin{itemize}
+	\item Importance matrix
+	\item Standard errors of the importance measure
+	\item Local importance
+	\item Number of trees grown
+	\item Number of predictors sampled at each node
+	\item Number of times the cases have been 'out of bag'
+	\item Proximity measures among the input
+	\item Out of bag error rate
+\end{itemize}
+
+\subsubsection{Prediction}
+\label{sect:rf_testing}
+Random Forest prediction has corresponding classification and regression functions. 
+\begin{lstlisting}
+%RF Classification prediction
+function [Y_hat votes] = classRF_predict(X,model, extra_options)
+
+%RF Regression prediction
+function Y_hat = regRF_predict(X,model)
+\end{lstlisting}
+\medskip
+Where X is the testing data, and the model is the Random Forest model obtained from training. The classification prediction function takes in extra parameters which was not utilised in this thesis.
+\\[1\baselineskip]
+For outputs of the prediction Y\_hat is the vector containing predictions on X. Specifically for classification, the output votes contains the non-normalised weights of the model.
+
+\subsection{SLICO Superpixels}
+\label{sect:slico}
+The SLICO algorithm is used to produce superpixel patches from an image. The supplied C code had to be compiled in order to use the functions.
+\\[1\baselineskip]
+ The SLICO superpixels function requires two input parameters: image, and the number of required superpixels. The outputs are: the labels and the number of produced superpixels. An example usage can be seen below. 
+\begin{lstlisting}
+[labels, numlabels] = slicomex(img,200);
+\end{lstlisting}
+
+\subsection{Feature Extraction}
+\label{sect:calcFeature}
+The same features were extracted throughout the thesis. The list of features extracted can be referred to in \ref{sect:features}. The feature calculation function has the following usage:
+\begin{lstlisting}
+%Feature calculation usage
+function F=calcFeature(S,I,f)
+\end{lstlisting}
+\medskip
+Where S is the labelled image or segmentation, I is the image to calculate features on, f holds the features to be calculated. The features were initialised for extraction as seen below.
+\begin{lstlisting}
+%Intialise cell with features
+cFG=0;
+tempf={};
+tempf{cFG+1}.name='Intensity';tempf{cFG+1}.par=[];cFG=cFG+1;
+tempf{cFG+1}.name='Gradient';tempf{cFG+1}.par=[];cFG=cFG+1;
+tempf{cFG+1}.name='GLCM';tempf{cFG+1}.par=[];cFG=cFG+1;
+tempf{cFG+1}.name='Entropy';tempf{cFG+1}.par=[];cFG=cFG+1;
+\end{lstlisting}
+\medskip
+The output of the feature extraction is a cell containing the features which was accessed as follows:
+\begin{lstlisting}
+%Accessing features from output
+features = calculate_features.fea;
+\end{lstlisting}
+
 \section{General Approach}
 Producing a segmentation approach was tackled in two main phases; the training and testing stage. For each of these stages, numerous experiments were conducted to find optimal parameters and procedures. Sections \ref{sect: trainstage} and \ref{sect: teststage} provide the general methods for each training and testing phase respectively.
 
-\subsection{Environment}
-An environment set up and initialisation was first done. The environment requires the paths to image directories, source functions, libraries and output directories. The environment is set up the same way for both training and testing phases with their corresponding output directories. The file contents for image directories were outputted for ease of access when loading them.  
-\todo{fIX THIS} 
-\begin{lstlisting}
+\section{Environment}
+An environment set up and initialisation was first done. The environment requires the paths to image directories, source functions, libraries and output directories. The environment is set up the same way for both training and testing phases with their corresponding output directories. The file contents for image directories were outputted for ease of access when loading them.  This is shown below with pseudo directories.
 
+\begin{lstlisting}[escapeinside={(*}{*)}]
 %% Initalise Directories 
 %Image paths
 addpath('Image paths');
-\textrm{\vdots}
 
 %Library paths
 addpath('library paths');
@@ -29,33 +133,116 @@ labellist=dir('label_path');
 masklist=dir('mask_path'); 
 \end{lstlisting}
 
-\subsection{Training Stage} 
+\section{Training Stage} 
 \label{sect: trainstage}
-The method for conducting the training phase can be seen in figure \ref{fig: trainflow} below. 
+The method for conducting the training phase can be seen in figure \ref{fig: trainflow} below. The phase is split in to pre-training stage and training stage.
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale = 0.65]{fig/trainingflow.png}
+\includegraphics[scale = 0.65]{fig/training_flow.png}
 \label{fig: trainflow}
 \caption{Flowchart outlining training phase procedure.}
 \end{figure}
 
-\subsubsection{Loading Images} 
-The training phase requires the training set of images and their corresponding labelled images and masks. These images are loaded using the NIfTI tools package \cite{ref:nifti_1} for MATLAB. Pseudo code shown below as an example. 
+The loading of images, superpixel production and features all need to be done first prior to the random forest training, making up the pre-training stage. The pre-training process highlighted in figure \ref{fig: flowtrainload} is repeated for the number of training images set. 
+
+\begin{figure}[H]
+
+\includegraphics[scale=0.6]{fig/loadtrainflow.png}
+\label{fig: flowtrainload}
+\caption{Flowchart of pre-training stage.}
+\end{figure}
+
+
+\subsection{Loading Images} 
+The training phase requires the training set of bone images and their corresponding labelled images and masks. These 3D images are loaded using the NIfTI tools package \cite{ref:nifti_1} for MATLAB. Pseudo directories amongst code shown below as an example. 
 \begin{lstlisting}
 %Index filelist for image
 get_image = fullfile('image_path', filelist(i).name);
 get_label = fullfile('label_path', labellist(i).name);
 get_mask =  fullfile('mask_path', masklist(i).name);
     
-%Loading nii image, label, and mask
+%Loading nii bone, label, and mask
 load_image = load_nii(get_image);
 load_label = load_nii(get_label);
 load_mask = load_nii(get_mask); 
+
+%Obtain .img of bone, label, and mask
+full_img = load_image.img;
+full_label = load_label.img;
+full_mask = load_mask.img;
+\end{lstlisting}
+
+
+\medskip
+The middle 2D slice of the bone, label and mask images are obtained by calculating the middle index along the z dimension. It should also be noted that the image intensities are scaled to be positive values. \todo{why does this need to be positive} 
+
+\begin{lstlisting}
+%Calculating the middle index
+mid = size(full_label,3)/2;
+
+%Obtaining middle image
+img = full_img(:,:, mid);
+min_img = min(img(:));
+img = img+abs(min_img);
+img_nii = make_nii(img);
+
+%Obtaining middle label
+label = full_label(:,:, mid );
+min_label = min(label(:));
+label = label + abs(min_label);
+label_nii = make_nii(label);
+
+%Obtaining middle mask
+mask = full_mask(:,:, mid);
+min_mask = min(mask(:));
+\end{lstlisting}
+
+\subsection{Patch Generation and Extraction}
+A superpixel lattice is generated for the 2D bone image slice using the SLIC superpixel algorithm. 
+
+\begin{lstlisting}
+%Generate superpixel
+[labels, numlabels] = slicomex(img, N_superpixels);
+imlabels = imagesc(labels);
+pixels = imlabels.CData;
+
+\end{lstlisting}
+The colour labels as seen in figure \todo{insert figure ref} is the output of the generated superpixel lattice where each colour represents a patch generated.
+\\[1\baselineskip]
+\todo[inline]{colour label image}
+\vspace{60mm}
+The image coordinates for each patch can then be calculated using this information. This is done by iterating through the total number of patches created and translating its linear index to the image subscripts. Coordinates are extracted from the bone image superpixel and the same coordinates are used to extract the labelled image patch. Each patch is checked against the mask image and removed if it is located outside the mask, ie. when the mask is 0. Patches are then stored in corresponding image and label cells.
+
+\begin{lstlisting}
+%Initialise patch storage
+patches = cell(numlabels, 1);
+label_patches = cell(numlabels, 1);
+
+%Extract patches
+for count_pixels = 1:numlabels
+    [rows cols] = ind2sub(size(pixels), ...
+        find(pixels == count_pixels - 1));
+    if (find(mask(rows, cols) == 0) ~= 0 ) %Discard outside mask
+        patches{count_pixels} = 0; 
+    else
+        patches{count_pixels} = img(rows, cols);
+    end
+    label_patches{count_pixels} = label(rows, cols);
+end
+\end{lstlisting} 
+
+\subsection{Feature Extraction}
+Features are extracted from the bone patches based on when the label patch contains bone. The features extracted were listed in \ref{sect:features} and the set up to begin extraction can be seen in
+
+
+\begin{lstlisting}
+
 \end{lstlisting}
 
 
 
+\subsubsection{Target Vector Creation}
 \subsection{Testing Stage}
 \label{sect: teststage}
 \todo[inline]{flow chart of testing}

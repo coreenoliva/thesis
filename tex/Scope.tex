@@ -32,12 +32,16 @@ MATLAB was the opted program and language to devise the experimentation and meth
 \subsubsection{Algorithms}
 \begin{enumerate}
 	\item  Machine learning algorithm: Random Forest
-	\item  Superpixel 
+	\item  Superpixel  -- slico used because simpler, less options, compactness factor calculated automatically, better suited for texture and non-texture regions. there are disadvantages (slow and more memory usage but this was deemed to be negligble ) 
+	
+	\item  Feature Extraction
 \end{enumerate}
+\todo[inline]{Instructions on how the algorithms are used, parameters etc.}
 Random Forest was the selected learning and prediction algorithm. For superpixel patches, the SLIC algorithm was used. \
 \todo[inline]{include feature extraction scripts?}
 
 \subsection{Features}
+\label{sect:features}
 Feature extraction was conducted to be utilised by the Random Forest. A total of 25 features were extracted as listed in table \ref{table: feature} below. The choice of features extracted remained constant throughout the thesis. The features were selected based on findings from \todo[inline]{ref last year thesis here}. 
 
 \begin{table}[H]
