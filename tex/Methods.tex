@@ -83,7 +83,6 @@ The SLICO algorithm is used to produce superpixel patches from an image. The sup
 \begin{lstlisting}
 [labels, numlabels] = slicomex(img,200);
 \end{lstlisting}
-
 \subsection{Feature Extraction}
 \label{sect:calcFeature}
 The same features were extracted throughout the thesis. The list of features extracted can be referred to in \ref{sect:features}. The feature calculation function has the following usage:
@@ -121,7 +120,8 @@ Producing a segmentation approach was tackled in two main phases; the training a
 \end{figure}
 
 \section{Pre-Training and Pre-Testing}
-The loading of images, superpixel patch production and feature extraction need to be done prior to the Random Forest processing for both training and testing phases. Both phases have similar aspects such as environment set up, image loading and preparation, superpixel generation and feature extractions - pre-training and pre-testing phases. Figure \ref{fig:prestages} gives an outline as to the process that occur in these initial phases. 
+\label{sect:pre}
+The loading of images, superpixel patch production and feature extraction need to be done prior to the Random Forest processing for both training and testing phases. Both phases have similar aspects such as environment set up, image loading and preparation, superpixel generation and feature extractions - pre-training and pre-testing phases. Figure \ref{fig:prestages} gives an outline as to the process that occur in these initial phases. The preparation stages are run iteratively for each training or testing image and saved in a struct.
 
 \begin{figure}[H]
 \centering
@@ -153,7 +153,7 @@ masklist=dir('mask_path');
 
 
 \subsection{Loading Images} 
-Both training and testing phases require the training set of bone images and their corresponding labelled images and masks. These 3D images are loaded using the NIfTI tools package \cite{ref:nifti_1} for MATLAB. Pseudo directories amongst code shown below as an example. 
+Both training and testing phases require the training set of bone images and their corresponding labelled images and masks. These 3D images of size $[X \times Y \times Z]$ are loaded using the NIfTI tools package \cite{ref:nifti_1} for MATLAB. Pseudo directories amongst code shown below as an example. 
 \begin{lstlisting}
 %Index filelist for image
 get_image = fullfile('image_path', filelist(i).name);
@@ -172,7 +172,15 @@ full_mask = load_mask.img;
 \end{lstlisting}
 
 \bigskip
-The middle 2D slice of the bone, label and mask images are obtained by calculating the middle index along the z dimension. It should also be noted that the image intensities are scaled to be positive values. \todo{why does this need to be positive} 
+The middle 2D slice of the bone, label and mask images are obtained by calculating the middle index along the z dimension producing a $[X \times Y]$ matrix. It should also be noted that the image intensities are scaled to be positive values for compatibility with superpixel generation and feature calculation.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{fig/imagesize.png}
+\caption{Matrix sizes for 2D bone, label and mask images.}
+\label{mat:image}
+\end{figure}
+
 \begin{lstlisting}
 %Calculating the middle index
 mid = size(full_label,3)/2;
@@ -194,6 +202,8 @@ mask = full_mask(:,:, mid);
 min_mask = min(mask(:));
 \end{lstlisting}
 
+
+
 \subsection{Patch Generation and Extraction}
 A superpixel lattice is generated for the 2D bone image slice using the SLIC superpixel algorithm. 
 
@@ -205,7 +215,7 @@ pixels = imlabels.CData;
 \end{lstlisting}
 \bigskip
 
-The colour labels as seen in figure \ref{fig:colourmap} is the output of the generated superpixel lattice where each colour represents a patch generated.
+The colour labels as seen in figure \ref{fig:colourmap} is the output of the generated superpixel lattice where each colour represents a patch generated. 
 
 \begin{figure}[H]
 \centering
@@ -214,12 +224,34 @@ The colour labels as seen in figure \ref{fig:colourmap} is the output of the gen
 \label{fig:colourmap}
 \end{figure}
 
-The image coordinates for each patch can then be calculated using this information. This is done by iterating through the total number of patches created and translating its linear index to the image subscripts. Coordinates are extracted from the bone image superpixel and the same coordinates are used to extract the labelled image patch. Each patch is checked against the mask image and removed if it is located outside the mask, ie. when the mask is 0. Patches are then stored in corresponding image and label cells.
+The image coordinates for each patch can then be calculated using the matrix produced - called pixels in the example code provided. This matrix contains the prescribed colour label for each element in the image and is the same size as the image.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{fig/pixelssize.png}
+\caption{Pixel matrix size.}
+\label{mat: pixel}
+\end{figure}
+
+
+Patch extraction iterating through the total number of patches created and translating its linear index to the image subscripts from the pixels matrix. Coordinates are then used to extract the superpixel patch from the bone image and the same coordinates are used to extract the labelled image patch. The patches that are extracted differ in size will be of dimension $[r \times c]$ where r and c are just subsets of the image size $[X \times Y]$.
+\\[1\baselineskip]
+Each patch is checked against the mask image and removed if it is located outside the mask, ie. when the mask is 0. Patches are then stored in corresponding bone and label cells.
+
+\begin{figure}[H]
+    \centering
+    \subfloat[Matrix size of patch.]{{\includegraphics[width=5cm]{fig/matpatch.png} }}
+    \qquad
+    \subfloat[Cell sizes to store patches]{{\includegraphics[width=5cm]{fig/patchcell.png} }}
+    \caption{Patch matrix and patch cell sizes.}%
+    \label{mat:patch_cell}
+\end{figure}
+
 
 \begin{lstlisting}
 %Initialise patch storage
-patches = cell(numlabels, 1);
-label_patches = cell(numlabels, 1);
+patches = cell(numlabels, 1); %Bone patches
+label_patches = cell(numlabels, 1); %Label patches
 
 %Extract patches
 for count_pixels = 1:numlabels
@@ -233,7 +265,15 @@ for count_pixels = 1:numlabels
     label_patches{count_pixels} = label(rows, cols);
 end
 \end{lstlisting} 
+\bigskip
+Figure \ref{fig: superpixel} below gives a visual on how the superpixel lattice appears over the training image. The lattice image produced is purely just for visual aid and does not contribute to the method. 
 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.65]{fig/lattice.png}
+\caption{Superpixel Lattice Overlay.}
+\label{fig: superpixel}
+\end{figure}
 \subsection{Feature Extraction}
 Features are extracted from the bone patches based on when the label patch contains bone. The features extracted were listed in \ref{sect:features} and the set up to prepare the feature extractions was outlined in \ref{sect:calcFeature}. Once the features were calculated, they are saved in a matrix. 
 \begin{lstlisting}
@@ -247,9 +287,16 @@ temp = calculate_features.fea;
 %Saving features in feature matrix
 features(num_patches, 1:length(temp)) = temp;
 \end{lstlisting}
-\medskip
-
-Once all the features of all the patches of all the images were calculated, this produced a matrix of size $[\textrm{total number of patches} \times 25]$, where each row represented each feature. 
+\bigskip
+Once all the features of all the patches were calculated, this produced a matrix of size $[\textrm{number of patches} \times 25]$, where each row represented each feature. Note that this matrix is only for 1 image. 
+\\[1\baselineskip]
+Mixed patches that have bone and non-bone produce features that go to negative infinity (NaN on Matlab). This becomes invalid to be used with the Random Forest training and testing functions in the later stages. To address this issue, the features which are produced as negative infinity are just re-written to be zeros. 
+\begin{lstlisting}
+%Features that go to NaN set to 0
+nan = find(isnan(features));
+[nanrow, nancol] = ind2sufb(size(features), nan);
+features(nanrow, nancol) = 0;
+\end{lstlisting}
 
 \subsection{Target Vector Creation}
 The final process of the preparation stages is to produce a target vector based off the corresponding label for the current image. For training, the target vector was required for Random Forest training. For the testing phase, the target vector was used to determine and analyse the accuracy of the predictions. Although the target vector was used differently by the training and testing phases, they are created the same way in the preparation stage so as to minimise computations. The size of the target vector is $[1 \times \textrm{number of patches}$. 
@@ -262,9 +309,8 @@ As superpixel patches are a cluster of individual pixels, there may be patches t
 \caption{Flowchart of processes to produce target vector.}
 \label{fig:targetvectorflow}
 \end{figure}
-
-The code used to simulate this process can be seen below.
-
+\bigskip
+\bigskip
 \begin{lstlisting}
 %% Producing Target Vector
 for num_patches = 1:numlabels %Iterate through number of labels
@@ -276,20 +322,134 @@ for num_patches = 1:numlabels %Iterate through number of labels
 end
 \end{lstlisting}
 
-
-\section{Training Stage} 
+\section{Training Phase} 
 \label{sect: trainstage}
-The training stage as seen in \ref{fig:training_testing_flow} comes after the pre-training stage. Figure \todo{reference figure here} outlines a detailed process of the training stage. 
+The training stage as seen in \ref{fig:training_testing_flow} comes after the pre-training stage and requires the struct that was produced. Figure \ref{fig:trainingflow} outlines a detailed process of the training stage. The features extracted per image along with its target matrices need to compiled into one training feature matrix and target training matrix. The training feature matrix is then normalised and put through the Random Forest algorithm which outputs a learnt model. 
 
 \begin{figure}[H]
-\includegraphics[scale=0.6]{fig/loadtrainflow.png}
-\caption{Flowchart of pre-training stage.}
-\label{fig: flowtrainload}
+\centering
+\includegraphics[scale=0.7]{fig/training_flow.png}
+\caption{Flowchart of process of training stage.}
+\label{fig:trainingflow}
+\end{figure}
+\todo{change struct to cell}
+\subsection{Compiling Random Forest Input Parameters}
+The pre-training stage was performed iteratively for each training image and saved in a data cell. The data cell contained the following information: 
+\begin{itemize}
+	\item Number of patches produced.
+	\item Matrix containing each pixels' prescribed colour label for patches.
+	\item Cell containing all the image patches that were extracted.
+	\item Cell containing all the corresponding label patches.
+	\item Feature matrix for each image.
+	\item Target vector for each image. 
+\end{itemize}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.6]{fig/datacell.png}
+\caption{Data cell used to store information extracted from pre-training stage.}
+\label{mat:data}
 \end{figure}
 
+The Random Forest training function requires a matrix of all the training features, $[\textrm{M} \times \textrm{Features}]$, and a corresponding training target, $[\textrm{M}\times 1]$. Where M represents the total number of training examples - i.e. the total number of patches. Each of these features are stored individually per image in the data cell. These need to be concatenated to produce the required training matrices as seen in figure \ref{mat:trainmat}. 
 
-\section{Testing Stage}
+\begin{lstlisting}
+%Intialising training_features and training_target
+training_features = 0;
+training_target = 0;
+
+%Iterate through number of images
+for i = 1:number_of_training_images
+   temp = data{i}.fea; %Get features for image i
+   temptarget = data{i}.target; %Get targets for image i
+
+	%Setting up first row   
+   if training_features == 0
+       training_features = temp;
+   elseif training_target == 0
+       training_target = temptarget;
+   else
+    if temp == 0 %No features calculated, skipping..
+        continue
+    end
+    
+    %Concatenate stored features and targets to 
+    %		previous iteration.
+    training_features = vertcat(training_features, temp);
+    training_target = vertcat(training_target, temptarget);
+   end
+end
+\end{lstlisting}
+
+
+\begin{figure}[H]
+    \centering
+    \subfloat[Size of Training Matrix.]{{\includegraphics[width=6cm]{fig/mattraining.png} }}
+    \qquad
+    \subfloat[Size of Target Training Matrix]{{\includegraphics[width=5cm]{fig/targettrainmat.png} }}
+    \caption{Size of the required matrices for training.}%
+    \label{mat:trainmat}
+\end{figure}
+
+\subsection{Normalisation}
+The features extracted can tend to differ depending on the image or type of feature being extracted.  The training matrix is then normalised to in order to have all properties relative to each other and within the same scale and distribution.  This was done using a supplied script, choosing to normalising between 0.009 to 0.999. The normalisation was done column-by-column.
+\\[1\baselineskip]
+\begin{lstlisting}
+%Normalizing training features 
+for i = 1:number_of_features; %Iterate through each column
+    temp = training_features(:,i);
+    training_features(:,i) = normalizetorange(temp,0.001,0.999);
+end
+\end{lstlisting}
+
+\subsection{Random Forest Training}
+The normalised training matrix and it's corresponding target matrix can now be used to build a model. This was done simply just like the usage shown in \ref{sect:rf_training}. Example code is shown below to follow the rest of the example pseudo code for both classification and regression.
+
+\begin{lstlisting}
+%Setup RF Parameters
+no_trees = number_of_trees;
+mtry = 20;
+extra_options.importance = 1;
+extra_options.proximity = 1;
+
+%RF classification train
+model = classRF_train(training_features, training_target,...
+		no_trees, mtry, extra_options);
+		
+%		OR
+		
+%RF regression train
+model = regRF_train(training_features, training_target,...
+		 no_trees, mtry, extra_options);
+\end{lstlisting}
+\bigskip
+The output produces a model that can be used to make predictions, which is done in the testing phase of the segmentation scheme. 
+\section{Testing Phase}
 \label{sect: teststage}
-\todo[inline]{flow chart of testing}
+
+The testing phase is compromised of many stages and processes as highlighted in the flowchart in \ref{fig:test_flow}. The processes within the pre-testing phase were outlined earlier in \ref{sect:pre}. However, the pre-testing phase is repeated numerous times for the number of resolutions required. The multi-resolution stage includes the prediction with the use of the model produced during training. Thresholding is performed on the prediction based on the current level of resolution. Once the multi-resolution patch extraction and predictions are complete, the results are then mapped onto an image to produce an initial segmentation. A morphological opening process is  then conducted on this image to produce the final segmentation. Finally, the accuracies are calculated based on the predicted output image and the manual segmented image that was processed in the pre-testing phase.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{fig/test_flow.png}
+\caption{Flowchart of testing processes.}
+\label{fig:test_flow}
+\end{figure}
+
+\subsection{Multi-Resolution} 
+The multi-resolution stage requires the model produced in the training phase and the processing and patch and feature extraction of the test bone, label and mask images. The main idea of the multi-resolution process is to first make predictions based on larger patches, discard patches that do not contain bone and re-do the process with smaller and smaller patches to produce a refined segmentation.  The final method uses two levels of resolution.The levels of resolution are defined by the number of superpixels and the corresponding threshold values. 
+\\[1\baselineskip]
+Once the initial patch and feature extraction has been conducted, the Random Forest can then make predictions on this data. The Random Forest testing usage was described in \ref{sect:rf_testing}.Below is the usage within this process. 
+\begin{lstlisting}
+%RF regression prediction
+ prediction_labels = regRF_predict(test_features, models.model);
+ prediction_labels = 1 - prediction_labels;
+\end{lstlisting}
+The feature matrix ($test_{features}$) is the feature extraction matrix. The output is a vector with a regression value for each prediction.
+\todo[inline]{include matrix sizes for test feature and prediction labels}
+inversion of labels
+
+
+
 
 \section{Tests}

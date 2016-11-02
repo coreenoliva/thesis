@@ -51,18 +51,13 @@ MATLAB was the opted program and language to devise the experimentation and meth
 
 The images supplied were NIfTI formatted. An external Matlab library was required in order to handle the processing of NIfTI files. Tools for NIfTI and  ANALYZE image was selected was it had good documentation and was easy to use for the functionality that was required from it.
 \\[1\baselineskip]
-Random Forest was the selected learning and prediction algorithm. They are ideal for application with this challenge as they are discriminative and powerful. 
-\todo[inline]{FINISH THIS} 
-
-For superpixel patches, the SLICO algorithm was used. 
-\todo[inline]{why dis}
-Feature extraction was conducted with a supplied scripts and functions.
-
-
+Random Forest was the selected learning and prediction algorithm. They are ideal for this application as they are discriminative and powerful learners. The success of this  segmentation scheme is reliable on the accuracy of the output segmentation, hence Random Forest is suitable as it has high accuracy in comparison to other machine learning classification algorithms. The timing of the results is also another contributing factor to the performance of the method. Random Forests are capable of efficiently handling large amounts of data which should lead to faster running prediction times.
+\\[1\baselineskip]
+For superpixel patches, the SLICO algorithm was used which is a modified version of the SLIC algorithm. The SLIC algorithm was selected as it is capable of generating compact superpixels efficiently. Again, this will aid in producing a fast segmentation scheme. The SLIC implementation is also very simple to use which supports the aim to reduce the complexity of the proposed method. The SLICO algorithm was chosen over SLIC as it is capable of calculating the optimal compactness factor which the SLIC algorithm otherwise requires an input for. SLICO is also beneficial as it is able to handle both texture and non-textural regions as needed, making it a much better superpixel segmentation with more accurate patches in differentiating between bone with texture and non-bone which is generally a  non-texture region. 
 
 \subsection{Features}
 \label{sect:features}
-Feature extraction was conducted to be utilised by the Random Forest. A total of 25 features were extracted as listed in table \ref{table: feature} below. The choice of features extracted remained constant throughout the thesis. The features were selected based on findings from \todo[inline]{ref last year thesis here}. 
+Feature extraction was conducted to be utilised by the Random Forest. A total of 25 features were extracted as listed in table \ref{table: feature} below. The choice of features extracted remained constant throughout the thesis. The features were selected based on findings from \cite{paper:multires}.
 
 \begin{table}[H]
 \centering
