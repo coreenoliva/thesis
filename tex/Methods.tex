@@ -412,12 +412,6 @@ mtry = 20;
 extra_options.importance = 1;
 extra_options.proximity = 1;
 
-%RF classification train
-model = classRF_train(training_features, training_target,...
-		no_trees, mtry, extra_options);
-		
-%		OR
-		
 %RF regression train
 model = regRF_train(training_features, training_target,...
 		 no_trees, mtry, extra_options);
@@ -445,9 +439,52 @@ Once the initial patch and feature extraction has been conducted, the Random For
  prediction_labels = regRF_predict(test_features, models.model);
  prediction_labels = 1 - prediction_labels;
 \end{lstlisting}
-The feature matrix ($test_{features}$) is the feature extraction matrix. The output is a vector with a regression value for each prediction.
-\todo[inline]{include matrix sizes for test feature and prediction labels}
-inversion of labels
+\bigskip
+The feature matrix ($test\_features$) is the feature extraction matrix and the prediction labels matrix is the output vector with a regression value for each prediction. It was found during testing that the prediction matrix was needed to be inverted in order to obtain the correct polarity in results.
+
+\begin{figure}[H]
+    \centering
+    \subfloat[Size of Testing Feature Matrix.]{{\includegraphics[width=6cm]{fig/testfeaturematrix.png} }}
+    \qquad
+    \subfloat[Size of Prediction Labbels Matrix.]{{\includegraphics[width=5cm]{fig/predictionlabelmat.png} }}
+    \caption{Size of the required matrix for testing and output matrix.}%
+    \label{mat:testmat}
+\end{figure}
+
+The prediction labels matrix contains the regression prediction for each patch that was extracted. The values of the regression range from probabilities of 0 to 1; 0 being whole patch non-bone and 1 being whole patch is bone. If a patch is non-bone, the corresponding image will also be set to 0 so that it will not be considered in the next resolutions' patch extraction and prediction. By minimising the amount of mixed patches, the result will be a more accurate and refined segmentation. 
+\\[1\baselineskip]
+ A threshold is used to determine at which probability the patch is considered a bone. This threshold was selected and verified during testing. Figure \ref{fig:thresh} shows the processes of thresholding the regression predictions.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale = 0.8]{fig/threshold.png}
+\caption{Threshold process flowchart.}
+\label{fig:thresh}
+\end{figure}
+
+\begin{lstlisting}
+for i = 1:number_of_patches 
+	%Obtain coordinates in test image for patch
+    [row col] = ind2sub(size(test_pixels), ...
+    			find(test_pixels == i-1)); 
+    
+       if  prediction_labels(i) < threshold  %Not bone
+            test_img(row, col) = 0; 
+            prediction_labels(i) = 0;
+       end 
+end
+\end{lstlisting}
+\subsection{Post Processing}
+Once the multi-resolution process of classifying patches to bone or non-bone was completed, the predicted patches then needed to be translated into 2D image form.
+\\[1\baselineskip]
+Each patch is iterated through and coordinates within the image are obtained. The patch prediction is then assigned to the pixels at these coordinates. Overall, bone pixels were represented with 1's and non-bone pixels represented by 0's. The process is stepped through below in figure \ref{fig:mapimage}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{fig/mapimage.png}
+\caption{Process of mapping prediction on to segmentation image.}
+\label{fig:mapimage}
+\end{figure}
 
 
 
