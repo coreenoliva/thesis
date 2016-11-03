@@ -482,11 +482,134 @@ Each patch is iterated through and coordinates within the image are obtained. Th
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.8]{fig/mapimage.png}
-\caption{Process of mapping prediction on to segmentation image.}
+\caption{Process of mapping prediction onto segmentation image.}
 \label{fig:mapimage}
 \end{figure}
 
+\begin{lstlisting}
+%Intialising classification image matrix
+classification = zeros(size(test_pixels,1),...
+	 size(test_pixels,2));
 
+for i = 1:number_of_patches
+    [row col] = ind2sub(size(test_pixels),...
+    		find(test_pixels == i-1));
+    if prediction_labels(i) ~= 0
+        classification(row, col) = 1;
+    else
+        classification(row, col) = prediction_labels(i);
+    end
+end
+\end{lstlisting}
+\bigskip
+Once the image has been mapped, the segmentation is further refined with morphology operations. The final method uses an opening operation on the image. This was simply done by defining the structural element and then using Matlab's opening function.
 
+\begin{lstlisting}
+%Morphology Opening image
+structural_element = strel('disk', 4);
+classification = imopen(classification, str_dil)
+\end{lstlisting}
 
-\section{Tests}
+\subsection{Accuracy Calculation}
+The performance of the produced segmentation result is compared to the test images' corresponding labelled image. The performances are calculated with respect to the patch classification accuracy and the pixel accuracy. The patch performance is determined by how well the model has correctly classified a patch. The image performance looks at how well the overall process  has been able to correctly classify each pixel. 
+\\[1\baselineskip]
+Scripts were devised for both patch and image performance quantification to output the following:
+\begin{enumerate}
+	\item Accuracy
+	\item Sensitivity
+	\item Specificity
+	\item True Positive
+	\item True Negative
+	\item False Positives
+	\item False Negatives
+	\item Confusion Matrix
+\end{enumerate}
+The performance script of the patch segmentation requires the prediction label and target label for each patch. Each patch is iterated through and classifications are checked against the target label to determine its statistic.  The total number of positive patches are summed in order to calculate the rates to quantify the results as a percentage. The process can be seen in \ref{fig: accuracypatch}.
+\\[1\baselineskip]
+Similar to the patch performance script, the image performance script requires the whole result segmentation and the labelled image. Each pixel is iterated through using a double for-loop as seen in figure \ref{fig: accuracyimage}, so as to index to the pixel element in the 2D matrix. The pixels are compared and the statistics are tallied in order to produce the required rates listed above.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width = 15cm]{fig/accuracypatch.png}
+\caption{Flowchart of patch accuracy script.}
+\label{fig: accuracypatch}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width = 15cm]{fig/accuracyimage.png}
+\caption{Flowchart of image accuracy script.}
+\label{fig: accuracyimage}
+\end{figure}
+
+\section{Parameter and Process Testing}
+Numerous tests were conducted in order to determine the optimal parameters and order of processes.  This process was split into two sections; the parameter search testing and process testing. The parameter search aims to find and justify the following parameters:
+\begin{itemize}
+\item Random Forest tree depth.
+\item Number of training images.
+\item Number of training superpixels.
+\item Number of testing superpixels.
+\item Regression or classification.
+\end{itemize}
+
+The process testing aimed to find following:
+\begin{itemize}
+\item Multi-resolution levels.
+\item Morphology processes, shapes and sizes.
+\end{itemize}
+
+\subsection{Parameter Search}
+All testing in the parameter search were conducted on both regression and classification types and with both 10 and 15 training images. Again the parameter search was split into two sections; to first find the Random Forest tree depth and thus use the value obtained to do the training and testing superpixel configurations.
+\\[1\baselineskip]
+Once the tree depth had been established, the optimal number of training superpixels was next to be justified. From there, the relationship between the number of training superpixels versus the number of testing superpixels were determined. With the optimal number of training superpixels determined for each Random Forest type and number of training images, the next step was to analyse the performance of 10 training images versus 15 for both regression and classification. The comparison between regression and classification usage was then conducted once all the prior parameters had been selected for optimal performance. 
+\subsubsection{Random Forest Tree Depth}
+Table \ref{table:treedepth} shows the tests that were conducted to determine the optimal Random Forest tree depth. A tree depth is selected for each regression, classification for each number of training images is selected and used for the rest of the processes.
+
+\begin{table}[H]
+\centering
+\caption{Tests and variables for tree depth search.}
+
+\begin{tabular}{|l|ll|}
+\hline
+\textbf{Conducted Tests}	& Random Forest type: & Regression,\\
+	& 	& Classification\\		
+	&  No. of Training Images: & 10, 15\\
+\hline
+\textbf{Controlled Variables} & No. of training superpixels: & 800 \\
+	& No. of testing superpixels: & 800\\
+\hline
+\textbf{Independent Variables} & Random Forest tree depth: & 100, 500, 1000, 2000, 5000\\
+\hline				    	 			   			    	 
+\end{tabular}
+\label{table:treedepth}
+\end{table}
+
+\subsubsection{Number of Training and Testing Superpixels}
+The test for the optimal number of training and testing superpixels were done simultaneously. Where the test for the number of testing superpixels were done for all numbers of training superpixels. The aim of these tests were to determine the optimal number of training superpixels. From this, was to establish the relationship between the number of testing superpixels and number of training superpixels.
+\begin{table}[H]
+\centering
+\caption{Tests and variables for number of training and testing superpixels}
+
+\begin{tabular}{|l|ll|}
+\hline
+\textbf{Conducted Tests}	& Random Forest type: & Regression,\\
+	& 	& Classification\\		
+	&  No. of Training Images: & 10, 15\\
+\hline
+\textbf{Controlled Variables} & Tree depth: & 1000 \\
+\hline
+\textbf{Independent Variables} & No. of training superpixels: & 500, 800, 1000 \\
+	& No. of testing superpixels: & 500, 800, 1000, 1500,  \\
+	&	 & 2000, 2500, 3000, 3500 \\
+\hline				    	 			   			    	 
+\end{tabular}
+\label{table:treedepth}
+\end{table}
+
+\subsection{Process Testing}
+With the parameters of the model optimised and justified, the next set of tests aim to investigate the required processing during the prediction phase. This includes determining the number of testing superpixels and what levels of multi-resolution should be utilised. Once a multi-resolution process has been selected, a test between morphology processes were conducted along with the shape and sizes of the accompanied structural element. All the process testing tests were conducted on the final trained model produced from the parameter search. 
+
+\subsubsection{Multi-Resolution}
+The performance of testing superpixels had been investigated in the parameter search during the training superpixel tests. The multi-resolution tests look at the
+\todo[inline]{WHAT ABOUT THRESHOLDING????}
+\subsection{Morphology}
