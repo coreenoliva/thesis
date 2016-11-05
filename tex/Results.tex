@@ -1,1 +1,45 @@
 \chapter{Results}
+\label{chpt: results}
+Chapter \ref{chpt: results} results provides an analysis to the results obtained throughout the processes in chapter \ref{chpt: method}. In particular, image segmentations and quantitative analysis  will be provided for the proposed segmentation method. The relationships obtained during parameter selection and process testing results will also be presented. 
+
+\section{Segmentation Method}
+The proposed segmentation scheme included a training and testing phase as highlighted from section \ref{sect: segapproach}, through to \ref{sect: teststage}. Where the testing phase produced 9 segmentation results. The performance of the segmentation scheme is analysed and evaluated visually and quantitatively. 
+
+\subsection{Visual Segmentation Results}
+The image to segment is seen in figure \ref{fig:img1} and the accompanied labelled image in figure \ref{fig:label1}.
+
+\begin{figure}[H]
+    \centering
+    \subfloat[Image 1 to segment.]{{\includegraphics[height=9cm]{fig/axialres/064/img.png} }\label{fig:img1}}
+    \\
+    \subfloat[Manual segmentation of image 1.]{{\includegraphics[height=9cm]{fig/axialres/064/label.png} }\label{fig:label1}}
+    \caption{Image 1 and its labelled image (manual segmentation).}%
+    \label{fig:image1}
+\end{figure}
+
+The best produced segmentation can be seen in \ref{fig:res1} below.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=10cm]{fig/axialres/064/res.png}
+\caption{Segmentation Result of Image 1.}
+\label{fig:res1}
+\end{figure}
+
+This segmentation is then over-layed over the MRI slice in \ref{fig:resimg1} while the manual segmentation is along side is in \ref{fig:labelimg1} for comparison. 
+
+\begin{figure}[H]
+    \centering
+    \subfloat[Result segmentation overlay.]{{\includegraphics[height=9cm]{fig/axialres/064/resimg.png} }\label{fig:resimg1}}
+    \\
+    \subfloat[Manual segmentation overlay]{{\includegraphics[height=9cm]{fig/axialres/064/labelimg.png} }\label{fig:labelimg1}}
+    \caption{Result and manual segmentation overlays.}%
+    \label{fig:overlay1}
+\end{figure}
+
+\subsection{Quantitative Results}
+
+
+\section{Parameter Search}
+
+\section{Process Testing}

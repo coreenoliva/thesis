@@ -108,9 +108,33 @@ The output of the feature extraction is a cell containing the features which was
 features = calculate_features.fea;
 \end{lstlisting}
 
-\pagebreak
-\section{General Approach}
-Producing a segmentation approach was tackled in two main phases; the training and testing stage. The overall general process can be seen below in figure \ref{fig:training_testing_flow}. For each of these stages, numerous experiments were conducted to find optimal parameters and procedures. 
+\section{Segmentation Approach}
+\label{sect: segapproach}
+Producing a segmentation approach was tackled in two main phases; the training and testing phase. The overall general process can be seen below in figure \ref{fig:training_testing_flow}. For each of these stages, numerous experiments were conducted to find optimal parameters and procedures which can be referred to in \ref{sect:paramtest}.
+\\[1\baselineskip]
+The final method makes use of the following parameters:
+
+\begin{table}[H]
+\centering
+\caption{Parameters for final method.}
+
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Tree depth}	& 15 \\		
+\hline
+\textbf{Number of Training Images} & 15 \\
+\hline
+\textbf{Number of Validation Images} & 5\\
+\hline		
+\textbf{Number of Testing Images} &  9 	\\ 	
+\hline
+\textbf{Number of Training Superpixels} & 800\\
+\hline
+\textbf{Multi-Resolution number of training superpixels} & 1500 - 2500\\		
+\hline    	 
+\end{tabular}
+\label{table:finalparameters}
+\end{table}
 
 \begin{figure}[H]
 \centering
@@ -299,7 +323,7 @@ features(nanrow, nancol) = 0;
 \end{lstlisting}
 
 \subsection{Target Vector Creation}
-The final process of the preparation stages is to produce a target vector based off the corresponding label for the current image. For training, the target vector was required for Random Forest training. For the testing phase, the target vector was used to determine and analyse the accuracy of the predictions. Although the target vector was used differently by the training and testing phases, they are created the same way in the preparation stage so as to minimise computations. The size of the target vector is $[1 \times \textrm{number of patches}$. 
+The final process of the preparation stages is to produce a target vector based off the corresponding label for the current image. For training, the target vector was required for Random Forest training. For the testing phase, the target vector was used to determine and analyse the accuracy of the predictions. Although the target vector was used differently by the training and testing phases, they are created the same way in the preparation stage so as to minimise computations. The size of the target vector is $[1 \times \textrm{number of patches}]$. 
 \\[1\baselineskip]
 As superpixel patches are a cluster of individual pixels, there may be patches that contain both bone and non-bone matter. If the patch contains any bone, it is labelled as bone, else the patch has to have no bone at all to be classified as non-bone. Bones are labelled as 1's and non bone's as 0's as outlined in the process flowchart in figure \ref{fig:targetvectorflow}.
 
@@ -393,7 +417,7 @@ end
 
 \subsection{Normalisation}
 The features extracted can tend to differ depending on the image or type of feature being extracted.  The training matrix is then normalised to in order to have all properties relative to each other and within the same scale and distribution.  This was done using a supplied script, choosing to normalising between 0.009 to 0.999. The normalisation was done column-by-column.
-\\[1\baselineskip]
+
 \begin{lstlisting}
 %Normalizing training features 
 for i = 1:number_of_features; %Iterate through each column
@@ -543,20 +567,57 @@ Similar to the patch performance script, the image performance script requires t
 \end{figure}
 
 \section{Parameter and Process Testing}
+\label{sect:paramtest}
 Numerous tests were conducted in order to determine the optimal parameters and order of processes.  This process was split into two sections; the parameter search testing and process testing. The parameter search aims to find and justify the following parameters:
 \begin{itemize}
+\item Regression threshold value.
 \item Random Forest tree depth.
 \item Number of training images.
 \item Number of training superpixels.
 \item Number of testing superpixels.
 \item Regression or classification.
 \end{itemize}
-
+\bigskip
 The process testing aimed to find following:
 \begin{itemize}
 \item Multi-resolution levels.
 \item Morphology processes, shapes and sizes.
 \end{itemize}
+Both regression and classification approaches are tested. The regression approach as an extra testing stage called the validation stage, whereas the classification approach doesn't. Table \ref{table:alldatasplit} below outlines the data split for each model type.
+\begin{table}[H]
+\centering
+\caption{Data split for classification and regression models.}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+& 	\textbf{Training Images}  & \textbf{Validation Images} & \textbf{Test Images}\\
+\hline
+\textbf{Classification}	&  10 & 0 & 9\\ \cline{2-4}
+	& 	15 & 0 & 9		\\
+\hline
+\textbf{Regression} & 10 & 10 & 9\\ \cline{2-4}
+	& 	15 & 5 & 9\\
+\hline		    	 			   			    	 
+\end{tabular}
+\label{table:alldatasplit}
+\end{table}
+
+\subsection{Threshold Validation}
+For all testing of regression models, a validation split of data was used to determine the optimal threshold value. The total data split process is highlighted in figure \ref{fig:datasplit} below. The model is trained on a number of training images, the corresponding number of validation images are then used to determine the optimal threshold value and this value is then tested on the 9 testing images. 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{fig/validation.png}
+\caption{Data split for threshold validation in regression model.}
+\label{fig:datasplit}
+\end{figure}
+The validation method takes in the validation images and the corresponding labels and masks. Like the other stages, the patches and their features are extracted and the label image patches obtained. The model used in training is then used to do a regression predict on the extracted patches. The output of the prediction gives a probability of bone in the patch. Each label patch is iterated through, if it contains bone, the regression output of that patch is saved. This way, all the regression values for expected bone patches are noted. Once all the patches had been iterated through, the minimum regression value gives the threshold value. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{fig/validation_flow.png}
+\caption{Validation stage flow chart.}
+\label{fig:valflow}
+\end{figure}
 
 \subsection{Parameter Search}
 All testing in the parameter search were conducted on both regression and classification types and with both 10 and 15 training images. Again the parameter search was split into two sections; to first find the Random Forest tree depth and thus use the value obtained to do the training and testing superpixel configurations.
@@ -578,7 +639,8 @@ Table \ref{table:treedepth} shows the tests that were conducted to determine the
 \textbf{Controlled Variables} & No. of training superpixels: & 800 \\
 	& No. of testing superpixels: & 800\\
 \hline
-\textbf{Independent Variables} & Random Forest tree depth: & 100, 500, 1000, 2000, 5000\\
+\textbf{Independent Variables} & Random Forest tree depth: & 100, 500, 1000,\\
+	& 	& 2000, 5000\\
 \hline				    	 			   			    	 
 \end{tabular}
 \label{table:treedepth}
@@ -603,13 +665,62 @@ The test for the optimal number of training and testing superpixels were done si
 	&	 & 2000, 2500, 3000, 3500 \\
 \hline				    	 			   			    	 
 \end{tabular}
-\label{table:treedepth}
+\label{table:numpixels}
 \end{table}
 
 \subsection{Process Testing}
 With the parameters of the model optimised and justified, the next set of tests aim to investigate the required processing during the prediction phase. This includes determining the number of testing superpixels and what levels of multi-resolution should be utilised. Once a multi-resolution process has been selected, a test between morphology processes were conducted along with the shape and sizes of the accompanied structural element. All the process testing tests were conducted on the final trained model produced from the parameter search. 
 
 \subsubsection{Multi-Resolution}
-The performance of testing superpixels had been investigated in the parameter search during the training superpixel tests. The multi-resolution tests look at the
-\todo[inline]{WHAT ABOUT THRESHOLDING????}
-\subsection{Morphology}
+The performance of testing superpixels had been investigated in the parameter search during the training superpixel tests. The multi-resolution tests tries different combination of number of testing superpixels based on the information and results from the superpixel testing. The aim of the test was to find the multi-resolution levels that supplied the best accuracy in the best amount of time. The multi-resolution test was conducted for both 10 and 15 training images to compare. 
+
+\begin{table}[H]
+\centering
+\caption{Tests and variables for multi-resolution testing.}
+
+\begin{tabular}{|l|ll|}
+\hline
+\textbf{Conducted Tests}	& Random Forest type: & Regression\\	
+	&  No. of Training Images: & 10, 15\\
+	
+\hline
+\textbf{Controlled Variables} & No. of training superpixels: & 800 \\
+\hline
+\textbf{Independent Variables} & Multi-resolution levels:& 800-1500, \\
+	& 	& 800-3500,\\
+	&	& 800-1500-3500,\\
+	&	& 1500-2500,\\
+	&	& 1500-3500\\
+\hline				    	 			   			    	 
+\end{tabular}
+\label{table:multires}
+\end{table}
+
+\subsubsection{Morphology}
+The morphological operation is conducted once the predicted segmentation has been mapped into an image. The purpose of the morphological operation is to further refine the borders of the segmentation and increase accuracy. This test was only done on the final method, investigating different morphology operations and the associated structural elements and its sizes. Each morphology operations' best structural shape and size produced accuracy were compared against one another to determine the optimal operation and structural element.
+
+\begin{table}[H]
+\centering
+\caption{Tests and variables for morphological operations and structural elements.}
+
+\begin{tabular}{|l|ll|}
+\hline
+\textbf{Conducted Tests}	 & Morphological Operations: & Opening,\\
+	& 	& Closing,\\ 
+	&	& Dilation,\\
+	&	& Erosion\\
+\hline
+\textbf{Controlled Variables} & No. of training superpixels: & 800 \\
+	 & Multi-resolution level: & 1500 - 3500\\
+	 & Random Forest type: & Regression\\	
+	 &  No. of Training Images: & 10\\
+\hline
+\textbf{Independent Variables} & Structural Elements: & Disk, \\
+	& 	& Diamond,\\
+	&	& Square\\
+	& Element sizes: & 1, 2, 3, 4\\
+\hline				    	 			   			    	 
+\end{tabular}
+\label{table:morphtest}
+\end{table}
+
