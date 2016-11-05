@@ -2,17 +2,21 @@
 \label{chpt: results}
 Chapter \ref{chpt: results} results provides an analysis to the results obtained throughout the processes in chapter \ref{chpt: method}. In particular, image segmentations and quantitative analysis  will be provided for the proposed segmentation method. The relationships obtained during parameter selection and process testing results will also be presented. 
 
+
 \section{Segmentation Method}
 The proposed segmentation scheme included a training and testing phase as highlighted from section \ref{sect: segapproach}, through to \ref{sect: teststage}. Where the testing phase produced 9 segmentation results. The performance of the segmentation scheme is analysed and evaluated visually and quantitatively. 
+
+\subsection{Final Model Parameters}
+\todo[inline]{state final parameters and training time} 
 
 \subsection{Visual Segmentation Results}
 The image to segment is seen in figure \ref{fig:img1} and the accompanied labelled image in figure \ref{fig:label1}.
 
 \begin{figure}[H]
     \centering
-    \subfloat[Image 1 to segment.]{{\includegraphics[height=9cm]{fig/axialres/064/img.png} }\label{fig:img1}}
+    \subfloat[Image 1 to segment.]{{\includegraphics[height=9cm]{fig/axialres/065/img.png} }\label{fig:img1}}
     \\
-    \subfloat[Manual segmentation of image 1.]{{\includegraphics[height=9cm]{fig/axialres/064/label.png} }\label{fig:label1}}
+    \subfloat[Manual segmentation of image 1.]{{\includegraphics[height=9cm]{fig/axialres/065/label.png} }\label{fig:label1}}
     \caption{Image 1 and its labelled image (manual segmentation).}%
     \label{fig:image1}
 \end{figure}
@@ -21,7 +25,7 @@ The best produced segmentation can be seen in \ref{fig:res1} below.
 
 \begin{figure}[H]
 \centering
-\includegraphics[height=10cm]{fig/axialres/064/res.png}
+\includegraphics[height=10cm]{fig/axialres/065/res.png}
 \caption{Segmentation Result of Image 1.}
 \label{fig:res1}
 \end{figure}
@@ -30,16 +34,224 @@ This segmentation is then over-layed over the MRI slice in \ref{fig:resimg1} whi
 
 \begin{figure}[H]
     \centering
-    \subfloat[Result segmentation overlay.]{{\includegraphics[height=9cm]{fig/axialres/064/resimg.png} }\label{fig:resimg1}}
+    \subfloat[Result segmentation overlay.]{{\includegraphics[height=9cm]{fig/axialres/065/resimg.png} }\label{fig:resimg1}}
     \\
-    \subfloat[Manual segmentation overlay]{{\includegraphics[height=9cm]{fig/axialres/064/labelimg.png} }\label{fig:labelimg1}}
+    \subfloat[Manual segmentation overlay]{{\includegraphics[height=9cm]{fig/axialres/065/labelimg.png} }\label{fig:labelimg1}}
     \caption{Result and manual segmentation overlays.}%
     \label{fig:overlay1}
 \end{figure}
 
+A total of 9 segmentation images  were produced which can be referred to in images \ref{fig:overlay2} through to \ref{fig:overlay9}. The segmentation result overlay is shown along with the manual segmentation overlay to set the context as to what the segmentation was aimed to achieve.
+
+\begin{figure}[H]
+    \centering
+    \subfloat[Result segmentation overlay.]{{\includegraphics[scale=0.6]{fig/axialres/017/resimg.png} }}
+    \quad
+    \subfloat[Manual segmentation overlay]{{\includegraphics[scale=0.6]{fig/axialres/017/labelimg.png} }}
+    \caption{Image 2 - Result and manual segmentation overlays.}%
+    \label{fig:overlay2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \subfloat[Result segmentation overlay.]{{\includegraphics[scale=0.6]{fig/axialres/063/resimg.png} }}
+    \quad
+    \subfloat[Manual segmentation overlay]{{\includegraphics[scale=0.6]{fig/axialres/063/labelimg.png} }}
+    \caption{Image 3 - Result and manual segmentation overlays.}%
+    \label{fig:overlay3}
+\end{figure}
+ 
+ \begin{figure}[H]
+    \centering
+    \subfloat[Result segmentation overlay.]{{\includegraphics[scale=0.6]{fig/axialres/064/resimg.png} }}
+    \quad
+    \subfloat[Manual segmentation overlay]{{\includegraphics[scale=0.6]{fig/axialres/064/labelimg.png} }}
+    \caption{Image 4 - Result and manual segmentation overlays.}%
+    \label{fig:overlay4}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \subfloat[Result segmentation overlay.]{{\includegraphics[scale=0.6]{fig/axialres/066/resimg.png} }}
+    \quad
+    \subfloat[Manual segmentation overlay]{{\includegraphics[scale=0.6]{fig/axialres/066/labelimg.png} }}
+    \caption{Image 5 - Result and manual segmentation overlays.}%
+    \label{fig:overlay5}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \subfloat[Result segmentation overlay.]{{\includegraphics[scale=0.6]{fig/axialres/067/resimg.png} }}
+    \quad
+    \subfloat[Manual segmentation overlay]{{\includegraphics[scale=0.6]{fig/axialres/067/labelimg.png} }}
+    \caption{Image 6 - Result and manual segmentation overlays.}%
+    \label{fig:overlay6}
+\end{figure}
+ 
+ \begin{figure}[H]
+    \centering
+    \subfloat[Result segmentation overlay.]{{\includegraphics[scale=0.6]{fig/axialres/068/resimg.png} }}
+    \quad
+    \subfloat[Manual segmentation overlay]{{\includegraphics[scale=0.6]{fig/axialres/068/labelimg.png} }}
+    \caption{Image 7 - Result and manual segmentation overlays.}%
+    \label{fig:overlay7}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \subfloat[Result segmentation overlay.]{{\includegraphics[scale=0.6]{fig/axialres/069/resimg.png} }}
+    \quad
+    \subfloat[Manual segmentation overlay]{{\includegraphics[scale=0.6]{fig/axialres/069/labelimg.png} }}
+    \caption{Image 8 - Result and manual segmentation overlays.}%
+    \label{fig:overlay8}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \subfloat[Result segmentation overlay.]{{\includegraphics[scale=0.6]{fig/axialres/072/resimg.png} }}
+    \quad
+    \subfloat[Manual segmentation overlay]{{\includegraphics[scale=0.6]{fig/axialres/072/labelimg.png} }}
+    \caption{Image 9 - Result and manual segmentation overlays.}%
+    \label{fig:overlay9}
+\end{figure}
+ 
+ 
 \subsection{Quantitative Results}
 
+The performance of the segmentation scheme is defined by the accuracy, sensitivity, specificity and testing time. The performance is evaluated based on the models' ability to conduct patch classification and thus, the resulting image pixel accuracies. The performance of the patch classification can be seen in table \ref{table:patchacc} and the overall image accuracy in table \ref{table:pixelacc}. The time taken to produce each segmentation can be seen in table \ref{table:times}.
+
+
+\begin{table}[H]
+\centering
+\caption{Patch based performance results of testing images.}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Image}	& \textbf{Accuracy} & \textbf{Sensitvity} & \textbf{Specificity}\\
+\hline
+\textbf{1}		& 1		& 1		& 1\\ 
+\hline
+\textbf{2} 		& 1		& 1		& 1	\\
+\hline
+\textbf{3}		& 1		& 1		& 1	\\
+\hline
+\textbf{4}		& 1		& 1		& 1	\\
+\hline
+\textbf{5}		& 1		& 1		& 1	\\
+\hline
+\textbf{6} 		& 1		& 1		& 1	\\
+\hline
+\textbf{7}		& 1		& 1		& 1	\\
+\hline
+\textbf{8}		& 1		& 1		& 1\\
+\hline
+\textbf{9} 		& 1		& 1		& 1\\
+\hline				    	 			   			    	 
+\end{tabular}
+\label{table:patchacc}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\caption{Pixel based performance results of testing images.}
+
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\textbf{Image}	& \textbf{Accuracy} & \textbf{Sensitvity} & \textbf{Specificity} & \textbf{Time(s)}\\
+\hline
+\textbf{1}		& 0.979		& 0.988		& 0.970		& 6.85 \\ 
+\hline
+\textbf{2} 		& 0.976		& 0.978		& 0.975		& 9.24\\
+\hline
+\textbf{3}		& 0.977		& 0.993 		& 0.964		& 6.42\\
+\hline
+\textbf{4}		& 0.969		& 0.982		& 0.957		& 6.67\\
+\hline
+\textbf{5}		& 0.974		& 0.983		& 0.967		& 6.36\\
+\hline
+\textbf{6} 		& 0.979		& 0.992		& 0.968		& 6.60\\
+\hline
+\textbf{7}		& 0.976		& 0.994		& 0.955		& 7.96\\
+\hline
+\textbf{8}		& 0.974		& 0.979		& 0.970		& 6.10\\
+\hline
+\textbf{9} 		& 0.975		& 0.978		& 0.955		& 6.38\\
+\hline				    	 			   			    	 
+\end{tabular}
+\label{table:pixelacc}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Testing times of segmentation scheme for testing images.}
+
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{Image}	& \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} &\textbf{6} &\textbf{7} & \textbf{8} &\textbf{9}\\
+\hline
+\textbf{Time(s)} & 6.85 & 9.24 & 6.42 & 6.67 & 6.36 & 6.60 & 7.96 & 6.10 & 6.38\\
+\hline				    	 			   			    	 
+\end{tabular}
+\label{table:times}
+\end{tabl
 
 \section{Parameter Search}
+The performance of the segmentation scheme is calculated during the parameter search to determine how the parameter affects and contributes to the final segmentation result. This section will display the results obtained from each parameter test that was described in \ref{sect:paramsearch}. The relationships with accuracy along with ROC curves were used to evaluate each test.As the patch classification performance determines the overall image accuracy, the performance is evaluated by the image accuracy.
+
+\subsection{Random Forest Tree Depth Search}
+The tree depth of the Random Forest training was tested by varying the tree depth and recording the performance. This test was run for both regression and classification, and models with 10 and 15 training images. 
+
+\subsubsection{Classification}
+For 10 training images, the performance of the image accuracy versus tree depth can be seen in figure \ref{class:tree10}. While figure \ref{class:tree15} displays the relationships between the tree depth with image accuracy when trained with  15 training images. 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{fig/class/tree/tree10.pdf}
+\caption{Tree depth versus accuracy for 10 training images, classification type.}
+\label{class:tree10}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{fig/class/tree/tree15.pdf}
+\caption{Tree depth versus accuracy for 15 training images, classification type.}
+\label{class:tree15}
+\end{figure}
+
+\subsubsection{Regression}
+The tree depth versus accuracy relationships were analysed for the regression model. The results from 10 and 15 training images can be seen in figure \ref{reg:tree10} and \ref{reg:tree15} respectively.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{fig/reg/tree10.pdf}
+\caption{Tree depth versus accuracy for 10 training images, regression type.}
+\label{reg:tree10}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{fig/reg/tree15.pdf}
+\caption{Tree depth versus accuracy for 15 training images, regression type.}
+\label{reg:tree15}
+\end{figure}
+
+\subsection{Number of Training Superpixels Search}
+\label{res:trainpix}
+This investigation aimed to find the relationship between the number of training superpixels versus image accuracy and testing time.
+
+\subsection{Number of Testing Superpixels Search}
+The number of testing superpixels were tested for regression and classification models and both 10 and 15 training images. They were tested against each number of training superpixels as part of the data collection and testing above in \ref{res:trainpix}. However, only the testing superpixels were only analysed based on the optimal number of training superpixels, which was 500 testing superpixels for 10 training images and 800 superpixels for 15 training images.
+
+
+
+\subsection{Number of Training Images}
+
+\subsection{Regression vs Classification}
+
 
 \section{Process Testing}
+With established training parameters, the post-processing stage is further optimised with more tests. These tests are conducted to determine the levels of resolution that will provide the best accuracies with respect to time and how the morphology processes can affect the output result.
+
+\subsection{Multi-Resolution Levels Testing}
+
+\subsection{Morphology Testing} 

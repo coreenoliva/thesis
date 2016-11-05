@@ -620,6 +620,7 @@ The validation method takes in the validation images and the corresponding label
 \end{figure}
 
 \subsection{Parameter Search}
+\label{sect:paramsearch}
 All testing in the parameter search were conducted on both regression and classification types and with both 10 and 15 training images. Again the parameter search was split into two sections; to first find the Random Forest tree depth and thus use the value obtained to do the training and testing superpixel configurations.
 \\[1\baselineskip]
 Once the tree depth had been established, the optimal number of training superpixels was next to be justified. From there, the relationship between the number of training superpixels versus the number of testing superpixels were determined. With the optimal number of training superpixels determined for each Random Forest type and number of training images, the next step was to analyse the performance of 10 training images versus 15 for both regression and classification. The comparison between regression and classification usage was then conducted once all the prior parameters had been selected for optimal performance. 
@@ -646,27 +647,56 @@ Table \ref{table:treedepth} shows the tests that were conducted to determine the
 \label{table:treedepth}
 \end{table}
 
-\subsubsection{Number of Training and Testing Superpixels}
-The test for the optimal number of training and testing superpixels were done simultaneously. Where the test for the number of testing superpixels were done for all numbers of training superpixels. The aim of these tests were to determine the optimal number of training superpixels. From this, was to establish the relationship between the number of testing superpixels and number of training superpixels.
+\subsubsection{Number of Training Superpixels}
+The optimal number of training superpixels was tested for its contribution to the segmentation result. For each number of training superpixels trialled, a range of testing superpixels were tested against in order to gain a better average about the performance. Furthermore, the relationship between number of training superpixels and testing time was also analysed. 
+
 \begin{table}[H]
 \centering
-\caption{Tests and variables for number of training and testing superpixels}
+\caption{Tests and variables for number of training superpixels tests.}
 
 \begin{tabular}{|l|ll|}
 \hline
 \textbf{Conducted Tests}	& Random Forest type: & Regression,\\
 	& 	& Classification\\		
 	&  No. of Training Images: & 10, 15\\
+	& No. of Testing Superpixels: & 500, 800, 1000,\\
+	& 	& 1500, 2000, 2500, \\ 
+	&	& 3000, 3500\\
 \hline
-\textbf{Controlled Variables} & Tree depth: & 1000 \\
+\textbf{Controlled Variables} & Random Forest tree depth: & 1000 \\
 \hline
-\textbf{Independent Variables} & No. of training superpixels: & 500, 800, 1000 \\
-	& No. of testing superpixels: & 500, 800, 1000, 1500,  \\
-	&	 & 2000, 2500, 3000, 3500 \\
+\textbf{Independent Variables} & No. of Training Superpixels: & 500, 800, 1000\\
 \hline				    	 			   			    	 
 \end{tabular}
-\label{table:numpixels}
+\label{table:trainpix}
 \end{table}
+
+
+\subsubsection{Number of Testing Superpixels}
+The test for the optimal number of testing superpixels was done simultaneously to the test for the number of training superpixels above. Where the test for the number of testing superpixels were done for the optimal numbers of training superpixels. From this, the relationship between the number of testing superpixels and number of training superpixels was established. 
+
+\begin{table}[H]
+\centering
+\caption{Tests and variables for number of testing superpixels tests.}
+
+\begin{tabular}{|l|ll|}
+\hline
+\textbf{Conducted Tests}	& Random Forest type: & Regression,\\
+	& 	& Classification\\		
+	&  No. of Training Images: & 10, 15\\
+	& No. of Training Superpixels: & 500, 800\\
+\hline
+\textbf{Controlled Variables} & Random Forest tree depth: & 1000 \\
+\hline
+\textbf{Independent Variables} & No. of Testing Superpixels: & 500, 800, 1000\\
+	&	& 1500, 2000, 2500.\\
+	&	& 3000, 3500\\
+\hline				    	 			   			    	 
+\end{tabular}
+\label{table:testpix}
+\end{table}
+
+
 
 \subsection{Process Testing}
 With the parameters of the model optimised and justified, the next set of tests aim to investigate the required processing during the prediction phase. This includes determining the number of testing superpixels and what levels of multi-resolution should be utilised. Once a multi-resolution process has been selected, a test between morphology processes were conducted along with the shape and sizes of the accompanied structural element. All the process testing tests were conducted on the final trained model produced from the parameter search. 
