@@ -194,7 +194,7 @@ The performance of the segmentation scheme is defined by the accuracy, sensitivi
 \hline				    	 			   			    	 
 \end{tabular}
 \label{table:times}
-\end{tabl
+\end{table}
 
 \section{Parameter Search}
 The performance of the segmentation scheme is calculated during the parameter search to determine how the parameter affects and contributes to the final segmentation result. This section will display the results obtained from each parameter test that was described in \ref{sect:paramsearch}. The relationships with accuracy along with ROC curves were used to evaluate each test.As the patch classification performance determines the overall image accuracy, the performance is evaluated by the image accuracy.
@@ -203,55 +203,85 @@ The performance of the segmentation scheme is calculated during the parameter se
 The tree depth of the Random Forest training was tested by varying the tree depth and recording the performance. This test was run for both regression and classification, and models with 10 and 15 training images. 
 
 \subsubsection{Classification}
-For 10 training images, the performance of the image accuracy versus tree depth can be seen in figure \ref{class:tree10}. While figure \ref{class:tree15} displays the relationships between the tree depth with image accuracy when trained with  15 training images. 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{fig/class/tree/tree10.pdf}
-\caption{Tree depth versus accuracy for 10 training images, classification type.}
-\label{class:tree10}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\linewidth]{fig/class/tree/tree15.pdf}
-\caption{Tree depth versus accuracy for 15 training images, classification type.}
-\label{class:tree15}
+\includegraphics[width=\linewidth]{fig/class/tree/treeboth.pdf}
+\caption{Tree depth versus accuracy for 10 and 15 training images, classification type.}
+\label{class:tree}
 \end{figure}
 
 \subsubsection{Regression}
-The tree depth versus accuracy relationships were analysed for the regression model. The results from 10 and 15 training images can be seen in figure \ref{reg:tree10} and \ref{reg:tree15} respectively.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\linewidth]{fig/reg/tree10.pdf}
-\caption{Tree depth versus accuracy for 10 training images, regression type.}
-\label{reg:tree10}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\linewidth]{fig/reg/tree15.pdf}
-\caption{Tree depth versus accuracy for 15 training images, regression type.}
-\label{reg:tree15}
+\includegraphics[width=\linewidth]{fig/reg/tree/treeboth.pdf}
+\caption{Tree depth versus accuracy for 10 and 15 training images, regression type.}
+\label{reg:tree}
 \end{figure}
 
 \subsection{Number of Training Superpixels Search}
 \label{res:trainpix}
-This investigation aimed to find the relationship between the number of training superpixels versus image accuracy and testing time.
+This investigation aimed to find the relationship between the number of training superpixels versus image accuracy and testing time. These relationships were analysed for classification and regression models with 10 and 15 training images. The number of training superpixels were tested against varying numbers of testing superpixels and averaged. 
+
+\subsubsection{Classification}
+\begin{figure}[H]
+    \centering
+    \subfloat[Accuracy vs Training Superpixels.]{{\includegraphics[width=\textwidth]{fig/class/trainpix/trainboth.pdf} }}
+    \\
+    \subfloat[Time vs Training Superpixels. ]{{\includegraphics[width=\textwidth]{fig/class/trainpix/timeboth.pdf} }}
+    \caption{Classification - Relationships with number of training superpixels for 10 and 15 training images.}%
+    \label{class:trainpix}
+\end{figure}
+
+\subsubsection{Regression}
+\begin{figure}[H]
+    \centering
+    \subfloat[Accuracy vs Training Superpixels.]{{\includegraphics[width=\textwidth]{fig/reg/trainpix/trainboth.pdf} }}
+    \\
+    \subfloat[Time vs Training Superpixels. ]{{\includegraphics[width=\textwidth]{fig/reg/trainpix/timeboth.pdf} }}
+    \caption{Regression - Relationships with number of training superpixels for 10 and 15 training images.}%
+    \label{reg:trainpix}
+\end{figure}
+
 
 \subsection{Number of Testing Superpixels Search}
-The number of testing superpixels were tested for regression and classification models and both 10 and 15 training images. They were tested against each number of training superpixels as part of the data collection and testing above in \ref{res:trainpix}. However, only the testing superpixels were only analysed based on the optimal number of training superpixels, which was 500 testing superpixels for 10 training images and 800 superpixels for 15 training images.
+The number of testing superpixels were tested for regression and classification models and both 10 and 15 training images and for classification and regression models. They are tested based on the optimal number of training superpixels found in the previous investigation. This search aims to explore the relationship between the number of testing superpixels and accuracy as well as the resulting affect on testing time. For 10 training images, 500 training superpixels was analysed and 800 training superpixels for 15 training images.
 
+\subsubsection{Classification}
+\begin{figure}[H]
+    \centering
+    \subfloat[Accuracy vs Testing Superpixels.]{{\includegraphics[width=\textwidth]{fig/class/testpix/testboth.pdf} }}
+    \\
+    \subfloat[Time vs Testing Superpixels. ]{{\includegraphics[width=\textwidth]{fig/class/testpix/timeboth.pdf} }}
+    \caption{Classification - Relationships with number of testing superpixels for 10 and 15 training images.}%
+    \label{class:testpix}
+\end{figure}
 
-
-\subsection{Number of Training Images}
-
-\subsection{Regression vs Classification}
-
+\subsubsection{Regression}
+\begin{figure}[H]
+    \centering
+    \subfloat[Accuracy vs Testing Superpixels.]{{\includegraphics[width=\textwidth]{fig/reg/testpix/testboth.pdf} }}
+    \\
+    \subfloat[Time vs Testing Superpixels. ]{{\includegraphics[width=\textwidth]{fig/reg/testpix/timeboth.pdf} }}
+    \caption{Regression - Relationships with number of testing superpixels for 10 and 15 training images.}%
+    \label{reg:testpix}
+\end{figure}
 
 \section{Process Testing}
 With established training parameters, the post-processing stage is further optimised with more tests. These tests are conducted to determine the levels of resolution that will provide the best accuracies with respect to time and how the morphology processes can affect the output result.
 
 \subsection{Multi-Resolution Levels Testing}
+This process looks at investigating the affect of different combinations of testing superpixels on the resulting segmentation. The time taken to create the segmentation is also considered noted. The multi-resolution level testing was conducted for both 10 and 15 training images for further comparison.
+\begin{figure}[H]
+    \centering
+    \subfloat[Accuracy vs Resolution Scheme.]{{\includegraphics[width=\textwidth]{fig/multires/multiresboth.pdf} }}
+    \\
+    \subfloat[Time vs Resolution Scheme. ]{{\includegraphics[width=\textwidth]{fig/multires/timeboth.pdf} }}
+    \caption{Resolution scheme accuracy and time relationships for 10 and 15 training images.}%
+    \label{reg: multires10}
+\end{figure}
+
+
+
 
 \subsection{Morphology Testing} 
