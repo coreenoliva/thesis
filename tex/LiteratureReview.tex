@@ -1,1 +1,63 @@
 \chapter{Literature Review}
+This chapter investigates various works and papers that outline methods and techniques which can be used to produce a solution for image segmentation challenges. Image segmentation methods are discussed in \ref{lit:imgseg}, Random Forest in \ref{lit:imgsegRF} and works on superpixels in \ref{lit:sp}.
+
+\section{Image Segmentation}
+\label{lit:imgseg}
+This section looks at varying methods which have been produced for image segmentation.
+\subsection{Template Based Method}
+\cite{ref:xia2013} looks to provide a comparison between the multi-atlas algorithm and 3D active shape model by assessing the accuracy, computational efficiency and robustness of these models in their application of producing segmented MRIs for clinical usage.
+\\[1\baselineskip]
+Results show that both models are capable of segmenting 'normal' shaped bones with high accuracy. However, the active shape model was found to perform a lot faster while providing a slightly more accurate segmentation compared to the multi-atlas method. 
+\\[1\baselineskip]
+Both active shape modelling and multi-atlas algorithm approaches are capable handling the image segmentation challenge of bones in MRIs. However, these models are limited in their generalisation to be applicable to varying bone structure and shapes. Active shape modelling and the multi-atlas algorithm are template based methods. In order to achieve this level of generalisation, they require the implementation of a very generic template for robustness and stability.
+\\[1\baselineskip]
+The limitations of these segmentation methods were challenged by testing the segmentation on female cases or cases with varying degrees of anatomical variation. As these models were devised based only on male cases, the result was that neither were successful in segmenting these images. However, this work has shown potential that joint segmentation in MRIs can be achieved. It can be learnt that it is difficult to produce a generic model to cater for anatomical variation in hip joints for template based models. 
+
+\subsection{Graph Cut Based Segmentation}
+An alternative algorithm that can be implemented in image segmentation is the Graph Cut based algorithm. \cite{ref:abab2011} proposes a solution to knee bone segmentation in MRIs. This method incorporates the use of extra pre processing stages to improve the segmentation scheme.
+\\[1\baselineskip]
+The image is first pre-processed to enhance certain features to aid in the determination of bone and non-bone regions. The image was then partitioned, where blocks of high probability containing bone are stored. This process is iterated to further discover more blocks with high likelihood of containing bone and then fed through the Graph Cut based algorithm to generate a segmentation mask.
+\\[1\baselineskip]
+It was found that the while the method was computationally efficient, robust and capable of yielding relatively accurate results. However the segmentation algorithm exhibited a lack of discriminative power. It was susceptible to background noise which affect the accuracy of the results in both busier and more vague boundaries. 
+\\[1\baselineskip]
+The Graph Cut based algorithm is incapable of handling noise which shows that there is not much potential for this to be further applied to image segmentation problems. However, the additional pre-processing stages proved to aid the performance of the segmentation scheme. The pre-processing stage minimises the amount of computations as blocks that are not likely to contain bone are skipped over. It also showed that an algorithm with more discriminative power is required for better classifications.
+
+\section{Random Forest}
+\label{lit:imgsegRF}
+\subsection{Random Forest Regression on CT Scans}
+The works in \cite{ref:ct2013} looks at applying regression based learning to segment the femur contour in CT scans. The use of the regression model was able to accurately achieve this. 
+\\[1\baselineskip]
+In particular, it demonstrates that randomness of data samples is imperative to produce a high performing model. The produced model had been generalised enough to be able to cater for both female and male anatomies. This gives an indication that the randomness of the data constitutes to the robustness of the Random Forest model. The studies into the performance of the regression model indicates that the Random Forest algorithm is capable of capturing displacements and contours which is ideal for a bone application. 
+\\[1\baselineskip] 
+Another interesting point is that the study made use of an additional post processing refinement stage after the segmentation was produced. This post-processing stage was a re-iteration of the segmentation through the regression model. It was found that this additional step significantly increases the performance and speed of the system. 
+
+\subsection{Random Forest Classification on MRIs}
+The segmentation of brain tissue in MRIs using Random Forest classification based learning  is explored in \cite{ref:pinto}. Although the application is for tissue, the paper is interesting as it provides an insight as to learning with the Random Forest algorithm and methods for improvement. 
+\\[1\baselineskip]
+The learning was implemented with a K-fold cross validation approach. This indicates that the parameters for the forest are determined via a validation process. By doing this, the optimal parameter can be obtained for the trained model, thus providing a more powerful classifier. It was found that an exhaustive search was too computational heavy, thus a random search was implemented. It was also highlighted that the model was prone to producing an over-fitted model if the parameter was not selected properly. 
+\\[1\baselineskip]
+The output of the model undergoes a post processing stage. This stage was the application of a morphological filter and improved the segmentation result by removing false positives generated. 
+
+\subsection{Random Forest Multi Resolution Approach}
+A multi resolution approach as been implemented to supplement the Random Forest based segementation in \cite{ref:zhu}. This method extracts random patches from images and then  investigates the segmentation performance when contrasting  the data used for learning.
+\\[1\baselineskip]
+It was found that training with the use of blocks did not provide an accurate segmentation and was more computationally expensive than training the whole image. It was also determined that testing with blocks as opposed to the whole image produce better segmentation results. It was noted that the size of these blocks affect the segmentation; large blocks inaccurate and small blocks produced many false positives.
+\\[1\baselineskip]
+The concept of testing with blocks was then enhanced by implementing a multi-resolution method which iterates the prediction, progressively decreasing the size of the block. By doing this, edges of the image are refined for a more accurate segmentation. All in all, the multi-resolution method along with the use of blocks increases segmentation accuracy while improving the speed.
+\section{Superpixels}
+\subsection{Superpixel Image Segmentation for Graph Cut Models}
+The works from \cite{ref:intsp} aims to improve the segmentation accuracy and efficiency with the use of superpixels. In particular, this is applied with the Graph Cut based algorithm which has a bad trade off between computation time and accuracy, deeming the algorithm rather inefficient. 
+\\[1\baselineskip]
+The application of SLIC superpixel to the segmentation algorithm was found to produce a more efficient segmentation scheme. The superpixel parameters were selected through various experiments, where the parameters are the number of superpixels and the rate of influence boundaries. It was found that as the number of superpixels in an image increases, so does the accuracy of the segmentation. However with this, the testing also slightly increases. This indicates that there is a small trade-off between efficiency and computation time.
+\\[1\baselineskip]
+Noisy or busy images are generally harder to segment with the regular segmentation schemes. It was found that the application of superpixels along with the Graph Cut algorithm provided better segmentations even in these circumstances. 
+\\[1\baselineskip]
+The results from \cite{ref:intsp} outline the benefits of implementing superpixels to further improve the efficiency of image segmentation models.
+\subsection{SLIC Superpixels Comparison}
+\label{lit:sp}
+There are various superpixel aglorithms, and \cite{ref:sp_1} looks at contrasting and comparing the SLIC superpixel algorithm against 5 existing state-of-the-art superpixel algorithms. The algorithms are compared based on the ability to adhere to boundaries, computation speed, and impact on segmentation performance. The type of superpixel algorithm to use is dependent on the application. 
+\\[1\baselineskip]
+SLIC superpixels are simpler, more efficient and are able to better adhere to boundaries in comparison to the other algorithms. However, it was found that the use of large superpixels produce superpixels less accurate with regards to boundary as it is looking at spatial information as opposed to colour. Smaller superpixels however are better suited for adhering to image boundaries. 
+\\[1\baselineskip]
+SLIC superpixels have been found to also improve image segmentation performance in terms of speed and accuracy. Furthermore, their applications can be extended to perform as supervoxels. These supervoxels were also found to be more accurate than other normal cube implementations. The efficiency and extendibility of SLIC superpixel algorithm is ideal for application in MRIs.
+

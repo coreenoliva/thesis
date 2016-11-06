@@ -111,12 +111,10 @@ features = calculate_features.fea;
 \section{Segmentation Approach}
 \label{sect: segapproach}
 Producing a segmentation approach was tackled in two main phases; the training and testing phase. The overall general process can be seen below in figure \ref{fig:training_testing_flow}. For each of these stages, numerous experiments were conducted to find optimal parameters and procedures which can be referred to in \ref{sect:paramtest}.
-\\[1\baselineskip]
-The final method makes use of the following parameters:
 
 \begin{table}[H]
 \centering
-\caption{Parameters for final method.}
+\caption{Parameters for proposed segmentation scheme.}
 
 \begin{tabular}{|l|l|l|}
 \hline
@@ -607,6 +605,7 @@ Both regression and classification approaches are tested. The regression approac
 \end{table}
 
 \subsection{Threshold Validation}
+\label{sect:valid}
 For all testing of regression models, a validation split of data was used to determine the optimal threshold value. The total data split process is highlighted in figure \ref{fig:datasplit} below. The model is trained on a number of training images, the corresponding number of validation images are then used to determine the optimal threshold value and this value is then tested on the 9 testing images. 
 \begin{figure}[H]
 \centering
