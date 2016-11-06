@@ -1,8 +1,10 @@
-\chapter{Results}
+\chapter{Results \& Discussions}
 \label{chpt: results}
-Chapter \ref{chpt: results} results provides an analysis to the results obtained throughout the processes in chapter \ref{chpt: method}. In particular, image segmentations and quantitative analysis  will be provided for the proposed segmentation method. The relationships obtained during parameter selection and process testing results will also be presented. 
+Chapter \ref{chpt: results} results provides an analysis to the results obtained throughout the processes in chapter \ref{chpt: method}. In particular, image segmentations and quantitative analysis  will be provided for the proposed segmentation method in \ref{sect:segmentationmethod} . The relationships obtained during parameter selection and process testing results will also be presented in 
+\ref{sect:parametersearch} and \ref{sect:processtesting}.
 
 \section{Segmentation Method}
+\label{sect:segmentationmethod}
 The proposed segmentation scheme included a training and testing phase as highlighted from section \ref{sect: segapproach}, through to \ref{sect: teststage}. Where the testing phase produced 9 segmentation results. The performance of the segmentation scheme is analysed and evaluated visually and quantitatively. The final parameters can be referred to in table \ref{table:finalparameters}.
 
 \subsection{Visual Segmentation Results}
@@ -193,6 +195,7 @@ The performance of the segmentation scheme is defined by the accuracy, sensitivi
 \end{table}
 
 \section{Parameter Search}
+\label{sect:parametersearch}
 The performance of the segmentation scheme is calculated during the parameter search to determine how the parameter affects and contributes to the final segmentation result. This section will display the results obtained from each parameter test that was described in \ref{sect:paramsearch}. The relationships with accuracy along with ROC curves were used to evaluate each test.As the patch classification performance determines the overall image accuracy, the performance is evaluated by the image accuracy.
 
 \subsection{Random Forest Tree Depth Search}
@@ -206,6 +209,24 @@ The tree depth of the Random Forest training was tested by varying the tree dept
 \label{class:tree}
 \end{figure}
 
+\begin{table}[H]
+\centering
+\caption{Classification model summary of performance for tree depth sweep.}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+ \textbf{Training Images} &	\textbf{Tree Depth} & \textbf{Accuracy}\\
+\hline
+10 & 1000 & 0.820\\
+\hline				    	 			
+15 & 1000 & 0.896 \\	
+\hline		    	 
+\end{tabular}
+\label{table:classtree}
+\end{table}
+
+From \ref{table:classtree}, it can be seen that the optimal tree depth is 1000 trees. Comparing the models of 10 and 15 training images, it can be seen that using 15 training images in the classification model provides much better level of accuracy.
+
 \subsubsection{Regression}
 
 \begin{figure}[H]
@@ -214,6 +235,24 @@ The tree depth of the Random Forest training was tested by varying the tree dept
 \caption{Tree depth versus accuracy for 10 and 15 training images, regression type.}
 \label{reg:tree}
 \end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Regression model summary of performance for tree depth sweep.}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+ \textbf{Training Images} &	\textbf{Tree Depth} & \textbf{Accuracy}\\
+\hline
+10 & 1000 & 0.896\\
+\hline				    	 			
+15 & 1000 & 0.896 \\	
+\hline		    	 
+\end{tabular}
+\label{table:regtree}
+\end{table}
+
+For the classification and regression mode in tables \ref{table:classtree} and \ref{table:regtree}, it can be seen that the optimal tree depth is 1000 across all tests. This entails that a tree depth of 1000 will be used for the rest of the tests and final model. It should be noted that the regression model is capable of producing more accurate results for both 10 and 15 training images. 
 
 \subsection{Number of Training Superpixels Search}
 \label{res:trainpix}
@@ -229,6 +268,27 @@ This investigation aimed to find the relationship between the number of training
     \label{class:trainpix}
 \end{figure}
 
+\begin{table}[H]
+\centering
+\caption{Classification model summary of performance for varying number of training superpixels.}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+ \textbf{Training Images} &	\textbf{Superpixels} & \textbf{Accuracy} & \textbf{Testing Time (s)}\\
+\hline
+10 & 500 & 0.923 & 9.16\\
+\hline				    	 			
+15 & 800 & 0.924 & 9.41\\	
+\hline		    	 
+\end{tabular}
+\label{table:classtrainpix}
+\end{table}
+
+The classification model performance above in figure \ref{class:trainpix} indicates that the model with 15 training images performs better overall in terms of accuracy.It can also be seen that in general, the model with 15 training images also has a longer classification time.
+\\[1\baselineskip]
+The optimal number of training superpixels for each model can be seen in \ref{table:classtrainpix} above and will be used as the respective parameters for the rest of the tests. It can be seen that the optimal values have similar accuracies and slight difference in testing times. There is a small trade off between accuracy and testing time when deciding between 10 and 15 training images.
+
+
 \subsubsection{Regression}
 \begin{figure}[H]
     \centering
@@ -239,6 +299,25 @@ This investigation aimed to find the relationship between the number of training
     \label{reg:trainpix}
 \end{figure}
 
+\begin{table}[H]
+\centering
+\caption{Regression model summary of performance for varying number of training superpixels.}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+ \textbf{Training Images} &	\textbf{Superpixels} & \textbf{Accuracy} & \textbf{Testing Time (s)}\\
+\hline
+10 & 500 & 0.925 & 7.19\\
+\hline				    	 			
+15 & 800 & 0.925& 7.00\\	
+\hline		    	 
+\end{tabular}
+\label{table:regtrainpix}
+\end{table}
+
+For the regression model, it can be seen in figure \ref{reg:trainpix}, the model with 15 training images has better accuracy and requires less time when producing a segmentation. From table \ref{table:regtrainpix}, the optimal number of training superpixels for both models provide the same accuracy with similar testing times, and will be used for the rest of the regression model tests.
+\\[1\baselineskip]
+ Comparing tables \ref{table:classtrainpix} and \ref{table:regtrainpix}, the regression model produces a more accurate segmentation in shorter amount of time. 
 
 \subsection{Number of Testing Superpixels Search}
 The number of testing superpixels were tested for regression and classification models and both 10 and 15 training images and for classification and regression models. They are tested based on the optimal number of training superpixels found in the previous investigation. This search aims to explore the relationship between the number of testing superpixels and accuracy as well as the resulting affect on testing time. For 10 training images, 500 training superpixels was analysed and 800 training superpixels for 15 training images.
@@ -253,6 +332,24 @@ The number of testing superpixels were tested for regression and classification 
     \label{class:testpix}
 \end{figure}
 
+From figure \ref{class:testpix}, as the number of testing superpixels increases, so does the accuracy and operating time of the segmentation. It is also noted that both models with 10 and 15 training images produce the same accuracy, with very similar testing times - indicating that there isn't that much of a difference between both models. it can be seen that the accuracy plateaus at 2500 testing superpixels, incurring more testing time for the same accuracy. From, this, 2500 testing superpixels would be the optimal amount of testing superpixels for both models. Values are listed below in \ref{table:classtestpix} for reference.
+
+\begin{table}[H]
+\centering
+\caption{Classification model optimal parameters for testing superpixels.}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+ \textbf{Training Images} &	\textbf{Superpixels} & \textbf{Accuracy} & \textbf{Testing Time (s)}\\
+\hline
+10 & 2500 & 0.963 & 15.96\\
+\hline				    	 			
+15 & 2500 & 0.963 & 15.61\\	
+\hline		    	 
+\end{tabular}
+\label{table:classtestpix}
+\end{table}
+
 \subsubsection{Regression}
 \begin{figure}[H]
     \centering
@@ -263,43 +360,79 @@ The number of testing superpixels were tested for regression and classification 
     \label{reg:testpix}
 \end{figure}
 
-\subsection{Summary of Parameter Testing Results}
-This section aims to summarise the findings and results throughout the parameter testing. Table \ref{table:paramres} aims to summarise the optimal parameter values and their accuracies obtained for both classification and regression models with 10 and 15 training images.
 
+\begin{table}[H]
+\centering
+\caption{Regression model optimal parameters of testing superpixels.}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+ \textbf{Training Images} &	\textbf{Superpixels} & \textbf{Accuracy} & \textbf{Testing Time (s)}\\
+\hline
+10 & 2500 & 0.964 & 11.94\\
+\hline				    	 			
+15 & 2500 & 0.964 & 11.86\\	
+\hline		    	 
+\end{tabular}
+\label{table:regtestpix}
+\end{table}
+
+Both 10 and 15 training images models produce the same level of accuracy for the same amount of testing superpixels. However, the model with 15 training images can achieve this in a shorter amount of time as seen in table \ref{table:regtestpix}. 
+\\[1\baselineskip]
+Comparing regression and classification models, the regression model is able to achieve slightly better accuracy in a shorter amount of time which is ideal for the final segmentation scheme. Both model types have the same number of the optimal number of testing superpixels.
+
+\subsection{Summary of Parameter Testing Results}
+This section aims to summarise the findings and results throughout the parameter testing. Table \ref{table:paramres} provides a summary of the optimal parameter values and their accuracies obtained for both classification and regression models with 10 and 15 training images.
 
 \begin{table}[H]
 \centering
 \caption{Summary of optimal parameters and accuracies. }
 
-\begin{tabular}{|l|l|l|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
 \hline
-	& \multicolumn{2}{|c|}{\textbf{Random Forest}} & \multicolumn{2}{|c|}{\textbf{No. Training}} & \multicolumn{2}{|c|}{\textbf{No. Testing}}	\\
-	&\multicolumn{2}{|c|}{\textbf{Tree Depth}}& 	\multicolumn{2}{|c|}{\textbf{Superpixels}} & \multicolumn{2}{|c|}{\textbf{Superpixels}}\\
+	& \multicolumn{2}{|c|}{\textbf{Random Forest}} & \multicolumn{3}{|c|}{\textbf{No. Training}} & \multicolumn{3}{|c|}{\textbf{No. Testing}}	\\
+	&\multicolumn{2}{|c|}{\textbf{Tree Depth}}& 	\multicolumn{3}{|c|}{\textbf{Superpixels}} & \multicolumn{3}{|c|}{\textbf{Superpixels}}\\
 \hline
-Training Images  & Value & Accuracy &  Value & Accuracy & Value & Accuracy\\	
+  & Value & Acc. & Value & Acc. & Time & Value & Acc. & Time \\	
 \hline 
 \hline
-\multicolumn{7}{|c|}{Classification}\\
+\multicolumn{9}{|c|}{Classification}\\
 \hline
-10 & 1000 & 0.820 & 500 & 0.923 & 2500 & 0.963 \\
-15 & 1000 & 0.896 & 800 & 0.924 & 2500 & 0.963 \\
+10 & 1000 & 0.820 & 500 & 0.923 & 9.16 & 2500 & 0.963 & 15.96\\
+15 & 1000 & 0.896 & 800 & 0.924 & 8.41 & 2500 & 0.963 & 15.61 \\
 \hline
 \hline
-\multicolumn{7}{|c|}{Regression}\\
+\multicolumn{9}{|c|}{Regression}\\
 \hline
-10 & 1000 & 0.896 & 500 & 0.925 & 2500 & 0.964\\
-15 & 1000 & 0.896 & 800 & 0.925 & 2500 & 0.964\\
+10 & 1000 & 0.896 & 500 & 0.925 & 7.19 & 2500 & 0.964 & 11.94\\
+15 & 1000 & 0.896 & 800 & 0.925 & 7.00 & 2500 & 0.964 & 11.86\\
 \hline
 		   		
 \end{tabular}
 \label{table:paramres}
 \end{table}
 
+\subsubsection{Final Model}
+With parameters devised for each classification and regression models, the type training model for the final method needs to be decided on.  From table \ref{table:paramres}, it can be seen that the regression segmentation results are able to produce more accurate segmentations in a shorter amount of time. Therefore, a regression type model will be used for the process testing and final method. 
+\\[1\baselineskip]
+Both models of 10 and 15 training images needs further testing to determine which is better suited. This is as both models have produced similar segmentation results in the same amount of time which does not constitute enough justification for the optimal number of training images. 
+
 \section{Process Testing}
+\label{sect:processtesting}
 With established training parameters, the post-processing stage is further optimised with more tests. These tests are conducted to determine the levels of resolution that will provide the best accuracies with respect to time and how the morphology processes can affect the output result.
 
 \subsection{Multi-Resolution Levels Testing}
 This process looks at investigating the affect of different combinations of testing superpixels on the resulting segmentation. The time taken to create the segmentation is also considered noted. The multi-resolution level testing was conducted for both 10 and 15 training images for further comparison. Table \ref{table:multires} provides a summary on the optimal resolution levels for each training image and their performances.
+
+\begin{figure}[H]
+    \centering
+    \subfloat[Accuracy vs Resolution Scheme.]{{\includegraphics[width=\textwidth]{fig/multires/multiresboth.pdf} }}
+    \\
+    \subfloat[Time vs Resolution Scheme. ]{{\includegraphics[width=\textwidth]{fig/multires/timeboth.pdf} }}
+    \caption{Resolution scheme accuracy and time relationships for 10 and 15 training images.}%
+    \label{reg: multires10}
+\end{figure}
+
 
 \begin{table}[H]
 \centering
@@ -317,17 +450,14 @@ This process looks at investigating the affect of different combinations of test
 \label{table:multiresres}
 \end{table}
 
-\begin{figure}[H]
-    \centering
-    \subfloat[Accuracy vs Resolution Scheme.]{{\includegraphics[width=\textwidth]{fig/multires/multiresboth.pdf} }}
-    \\
-    \subfloat[Time vs Resolution Scheme. ]{{\includegraphics[width=\textwidth]{fig/multires/timeboth.pdf} }}
-    \caption{Resolution scheme accuracy and time relationships for 10 and 15 training images.}%
-    \label{reg: multires10}
-\end{figure}
+From figure \ref{reg: multires10}, it can be seen that each resolution scheme produces similar segmentation results but with varying operating times. Where the accuracies produced for models of 10 and 15 training images result in similar segmentation accuracy but the model with 15 training images has longer segmentation times. 
+\\[1\baselineskip]
+The aim of this test is to select the resolution scheme which balances the trade-off between accuracy and segmentation time. From table \ref{table:multiresres}, it can be seen that the model with 10 training images is the fastest out of the two and maintains the same segmentation accuracy. Therefore, the final model will be based on 10 training images. 
 
 \subsection{Morphology Testing} 
-The test for the best morphology operation encompasses a investigations to not only the different morphological operations but the structural element and its' size. Each size and shape of structural element was tested for each type of operation for the 9 testing images. Within each structural shape per operation, the accuracies are averaged per structural shape size. The performance of each morphological operation are summarised by the best performing structural element size for each shape. The overall accuracy for each morphological operation according to the structural elements can be seen in figure \ref{fig:morphres}. Table \ref{table:morphres} provides a summary on the best performing structural element per morphology operation.
+The test for the best morphology operation encompasses investigations into not only the different morphological operations but the structural element and its' size. Each size and shape of structural element was tested against each type of morphological operation for the 9 testing images. 
+\\[1\baselineskip]
+Within each structural shape per operation, the accuracies are averaged per structural shape size. The performance of each morphological operation are summarised by the best performing structural element size for each shape. The overall accuracy for each morphological operation according to the structural elements can be seen in figure \ref{fig:morphres}. Table \ref{table:morphres} provides a summary on the best performing structural element per morphology operation.
 
 \begin{figure}[H]
 \centering
@@ -355,3 +485,7 @@ Erosion & Disk & 1 & 0.975\\
 \end{tabular}
 \label{table:morphres}
 \end{table}
+
+From figure,\ref{fig:morphres}, it is noticeable that the opening and erosion operations produce more accurate segmentations across all structural element shapes. Looking more closely in table \ref{table:morphres}, the opening operation provides a higher accuracy than the erosion operation. Therefore, as optimal accuracy is the goal, the final morphology process state will be an opening operation with a disk shaped structural element of size 4.
+\\[1\baselineskip]
+The final parameters can be revisited in table \ref{table:finalparameters}.
