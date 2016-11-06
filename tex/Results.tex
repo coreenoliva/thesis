@@ -2,15 +2,11 @@
 \label{chpt: results}
 Chapter \ref{chpt: results} results provides an analysis to the results obtained throughout the processes in chapter \ref{chpt: method}. In particular, image segmentations and quantitative analysis  will be provided for the proposed segmentation method. The relationships obtained during parameter selection and process testing results will also be presented. 
 
-
 \section{Segmentation Method}
-The proposed segmentation scheme included a training and testing phase as highlighted from section \ref{sect: segapproach}, through to \ref{sect: teststage}. Where the testing phase produced 9 segmentation results. The performance of the segmentation scheme is analysed and evaluated visually and quantitatively. 
-
-\subsection{Final Model Parameters}
-\todo[inline]{state final parameters and training time} 
+The proposed segmentation scheme included a training and testing phase as highlighted from section \ref{sect: segapproach}, through to \ref{sect: teststage}. Where the testing phase produced 9 segmentation results. The performance of the segmentation scheme is analysed and evaluated visually and quantitatively. The final parameters can be referred to in table \ref{table:finalparameters}.
 
 \subsection{Visual Segmentation Results}
-The image to segment is seen in figure \ref{fig:img1} and the accompanied labelled image in figure \ref{fig:label1}.
+The axial view image to segment is seen in figure \ref{fig:img1} and the accompanied labelled image in figure \ref{fig:label1}. Furthermore, the segmentation scheme was performed on the coronal view of the joint and the results can be seen in appendix bla \todo{ref appendix coronal}.
 
 \begin{figure}[H]
     \centering
@@ -267,11 +263,60 @@ The number of testing superpixels were tested for regression and classification 
     \label{reg:testpix}
 \end{figure}
 
+\subsection{Summary of Parameter Testing Results}
+This section aims to summarise the findings and results throughout the parameter testing. Table \ref{table:paramres} aims to summarise the optimal parameter values and their accuracies obtained for both classification and regression models with 10 and 15 training images.
+
+
+\begin{table}[H]
+\centering
+\caption{Summary of optimal parameters and accuracies. }
+
+\begin{tabular}{|l|l|l|l|l|l|l|}
+\hline
+	& \multicolumn{2}{|c|}{\textbf{Random Forest}} & \multicolumn{2}{|c|}{\textbf{No. Training}} & \multicolumn{2}{|c|}{\textbf{No. Testing}}	\\
+	&\multicolumn{2}{|c|}{\textbf{Tree Depth}}& 	\multicolumn{2}{|c|}{\textbf{Superpixels}} & \multicolumn{2}{|c|}{\textbf{Superpixels}}\\
+\hline
+Training Images  & Value & Accuracy &  Value & Accuracy & Value & Accuracy\\	
+\hline 
+\hline
+\multicolumn{7}{|c|}{Classification}\\
+\hline
+10 & 1000 & 0.820 & 500 & 0.923 & 2500 & 0.963 \\
+15 & 1000 & 0.896 & 800 & 0.924 & 2500 & 0.963 \\
+\hline
+\hline
+\multicolumn{7}{|c|}{Regression}\\
+\hline
+10 & 1000 & 0.896 & 500 & 0.925 & 2500 & 0.964\\
+15 & 1000 & 0.896 & 800 & 0.925 & 2500 & 0.964\\
+\hline
+		   		
+\end{tabular}
+\label{table:paramres}
+\end{table}
+
 \section{Process Testing}
 With established training parameters, the post-processing stage is further optimised with more tests. These tests are conducted to determine the levels of resolution that will provide the best accuracies with respect to time and how the morphology processes can affect the output result.
 
 \subsection{Multi-Resolution Levels Testing}
-This process looks at investigating the affect of different combinations of testing superpixels on the resulting segmentation. The time taken to create the segmentation is also considered noted. The multi-resolution level testing was conducted for both 10 and 15 training images for further comparison.
+This process looks at investigating the affect of different combinations of testing superpixels on the resulting segmentation. The time taken to create the segmentation is also considered noted. The multi-resolution level testing was conducted for both 10 and 15 training images for further comparison. Table \ref{table:multires} provides a summary on the optimal resolution levels for each training image and their performances.
+
+\begin{table}[H]
+\centering
+\caption{Summary of performance for the optimal resolution schemes.}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+&	\textbf{Resolution} & \textbf{Accuracy} & \textbf{Testing Time}\\
+\hline
+\textbf{10} & 1500-2500 & 0.968 & 19.21\\
+\hline				    	 			
+\textbf{15} & 1500-2500 & 0.968 & 19.29\\	
+\hline		    	 
+\end{tabular}
+\label{table:multiresres}
+\end{table}
+
 \begin{figure}[H]
     \centering
     \subfloat[Accuracy vs Resolution Scheme.]{{\includegraphics[width=\textwidth]{fig/multires/multiresboth.pdf} }}
@@ -281,7 +326,32 @@ This process looks at investigating the affect of different combinations of test
     \label{reg: multires10}
 \end{figure}
 
-
-
-
 \subsection{Morphology Testing} 
+The test for the best morphology operation encompasses a investigations to not only the different morphological operations but the structural element and its' size. Each size and shape of structural element was tested for each type of operation for the 9 testing images. Within each structural shape per operation, the accuracies are averaged per structural shape size. The performance of each morphological operation are summarised by the best performing structural element size for each shape. The overall accuracy for each morphological operation according to the structural elements can be seen in figure \ref{fig:morphres}. Table \ref{table:morphres} provides a summary on the best performing structural element per morphology operation.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{fig/morphres.pdf}
+\caption{Morphology operations accuracies based on structural element shape.}
+\label{fig:morphres}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\caption{Summary of performance for morphology operations based on structural element.}
+
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Operation} &	\textbf{Shape} & \textbf{Size} & \textbf{Accuracy}\\
+\hline
+Opening & Disk  & 4  & 0.976\\
+\hline				    	 			
+Closing & Square & 4  & 0.968\\	
+\hline
+Dilation & Square & 1 & 0.968\\
+\hline
+Erosion & Disk & 1 & 0.975\\		    	 
+\hline 
+\end{tabular}
+\label{table:morphres}
+\end{table}
