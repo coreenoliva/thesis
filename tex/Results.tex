@@ -113,9 +113,10 @@ A total of 9 segmentation images  were produced which can be referred to in imag
     \label{fig:overlay9}
 \end{figure}
  
+ It can be seen that the result segmentations are quite similar to the manual segmentations. The differences lie within the borders as they appear less refined and small or thin strips of bone. The performance of the result segmentation is properly evaluated with accuracies in \ref{sect:quant} below.
  
 \subsection{Quantitative Results}
-
+\label{sect:quant}
 The performance of the segmentation scheme is defined by the accuracy, sensitivity, specificity and testing time. The performance is evaluated based on the models' ability to conduct patch classification and thus, the resulting image pixel accuracies. The performance of the patch classification can be seen in table \ref{table:patchacc} and the overall image accuracy in table \ref{table:pixelacc}. The time taken to produce each segmentation can be seen in table \ref{table:times}.
 
 
@@ -144,11 +145,15 @@ The performance of the segmentation scheme is defined by the accuracy, sensitivi
 \textbf{8}		& 1		& 1		& 1\\
 \hline
 \textbf{9} 		& 1		& 1		& 1\\
-\hline				    	 			   			    	 
+\hline				    	 			 
+\hline
+\textbf{Avg}		&1		& 1		& 1\\ 
+\hline		    	 
 \end{tabular}
 \label{table:patchacc}
 \end{table}
 
+It can be seen that the segmentation model has the ability to correctly predict the label of patches perfectly for the 9 testing images. This success is due to the thorough model parameter search in order to obtain a powerful classifier. However, this high classification success does not entail that the segmentation image is perfectly segmented as patches that are labelled as bones are only an indication that there are bones in the patch. By setting a whole patch to be labelled as bone, this may in turn label individual non-bone pixels as bones. Therefore, the result of the segmentation is limited to how well defined each superpixel is within the image. Table \ref{table:pixelacc} below provides the accuracy of how well each pixel was labelled in the test images.
 
 \begin{table}[H]
 \centering
@@ -156,44 +161,50 @@ The performance of the segmentation scheme is defined by the accuracy, sensitivi
 
 \begin{tabular}{|l|l|l|l|l|}
 \hline
-\textbf{Image}	& \textbf{Accuracy} & \textbf{Sensitvity} & \textbf{Specificity} & \textbf{Time(s)}\\
+\textbf{Image}	& \textbf{Accuracy} & \textbf{Sensitvity} & \textbf{Specificity}\\
 \hline
-\textbf{1}		& 0.979		& 0.988		& 0.970		& 6.85 \\ 
+\textbf{1}		& 0.979		& 0.988		& 0.970\\ 
 \hline
-\textbf{2} 		& 0.976		& 0.978		& 0.975		& 9.24\\
+\textbf{2} 		& 0.976		& 0.978		& 0.975\\
 \hline
-\textbf{3}		& 0.977		& 0.993 		& 0.964		& 6.42\\
+\textbf{3}		& 0.977		& 0.993 		& 0.964\\
 \hline
-\textbf{4}		& 0.969		& 0.982		& 0.957		& 6.67\\
+\textbf{4}		& 0.969		& 0.982		& 0.957\\
 \hline
-\textbf{5}		& 0.974		& 0.983		& 0.967		& 6.36\\
+\textbf{5}		& 0.974		& 0.983		& 0.967\\
 \hline
-\textbf{6} 		& 0.979		& 0.992		& 0.968		& 6.60\\
+\textbf{6} 		& 0.979		& 0.992		& 0.968\\
 \hline
-\textbf{7}		& 0.976		& 0.994		& 0.955		& 7.96\\
+\textbf{7}		& 0.976		& 0.994		& 0.955\\
 \hline
-\textbf{8}		& 0.974		& 0.979		& 0.970		& 6.10\\
+\textbf{8}		& 0.974		& 0.979		& 0.970\\
 \hline
-\textbf{9} 		& 0.975		& 0.978		& 0.955		& 6.38\\
-\hline				    	 			   			    	 
+\textbf{9} 		& 0.975		& 0.978		& 0.955\\
+\hline
+\hline
+\textbf{Avg}		& 0.976		& 0.985		& 0.967\\		
+\hline	    	 			   			    	 
 \end{tabular}
 \label{table:pixelacc}
 \end{table}
+
+Table \ref{table:pixelacc} accuracies indicate that the proposed segmentation has the ability to provide relatively high accurate segmentations consistently, where both sensitivity and specificity rates are high. The average segmentation result can be completed in 6.95 seconds with an 0.976 accuracy. The number of testing superpixels along with post-processing stages after the prediction stage contributes to the resulting segmentation. 
 
 \begin{table}[H]
 \centering
 \caption{Testing times of segmentation scheme for testing images.}
 
-\begin{tabular}{|l|l|l|l|l|l|l|l|l|l|}
+\begin{tabular}{|l|l|l|l|l|l|l|l|l|l||l|}
 \hline
-\textbf{Image}	& \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} &\textbf{6} &\textbf{7} & \textbf{8} &\textbf{9}\\
+\textbf{Image}	& \textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} &\textbf{6} &\textbf{7} & \textbf{8} &\textbf{9} & \textbf{Avg}\\
 \hline
-\textbf{Time(s)} & 6.85 & 9.24 & 6.42 & 6.67 & 6.36 & 6.60 & 7.96 & 6.10 & 6.38\\
+\textbf{Time(s)} & 6.85 & 9.24 & 6.42 & 6.67 & 6.36 & 6.60 & 7.96 & 6.10 & 6.38 & 6.95\\
 \hline				    	 			   			    	 
 \end{tabular}
 \label{table:times}
 \end{table}
-
+\todo[inline]{threshold validation} 
+\todo[inline]{Training times? what section took the longest?} 
 \section{Parameter Search}
 \label{sect:parametersearch}
 The performance of the segmentation scheme is calculated during the parameter search to determine how the parameter affects and contributes to the final segmentation result. This section will display the results obtained from each parameter test that was described in \ref{sect:paramsearch}. The relationships with accuracy along with ROC curves were used to evaluate each test.As the patch classification performance determines the overall image accuracy, the performance is evaluated by the image accuracy.
@@ -487,5 +498,6 @@ Erosion & Disk & 1 & 0.975\\
 \end{table}
 
 From figure,\ref{fig:morphres}, it is noticeable that the opening and erosion operations produce more accurate segmentations across all structural element shapes. Looking more closely in table \ref{table:morphres}, the opening operation provides a higher accuracy than the erosion operation. Therefore, as optimal accuracy is the goal, the final morphology process state will be an opening operation with a disk shaped structural element of size 4.
-\\[1\baselineskip]
+
 The final parameters can be revisited in table \ref{table:finalparameters}.
+\todo{ROC of growth of accuracy as each stage was added?} 

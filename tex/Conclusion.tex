@@ -1,2 +1,35 @@
 \chapter{Conclusion}
+
+This thesis aimed to produce a functional MRI bone segmentation scheme. This was achieved by utilising the Random Forest and SLIC algorithms and through thorough parameter searching and various processes testing,. The segmentation scheme was approached in two phases - the training and a multi-resolution testing phase. The project had 29 MRIs of hip joints where 10 where used for training, 10 for threshold validation and 9 for testing.
+\\[1\baselineskip]
+The training phase was aimed at producing a model that would be able to correctly make predictions consistently. This was achieved as seen in \ref{table:patchacc}, the model was able to make the correct predictions for all testing images. The training phase incorporated the exhaustive and thorough search for training parameters that lead to a high performing classifier. These parameters included: model type (regression or classification) number of training images, tree depth and number of training superpixels. 
+\\[1\baselineskip]
+It was determined that a regression type model would be used for the final segmentation scheme as it was able to provide higher accuracy segmentations in a shorter amount of time (compared to classification type models). The regression model outputs the numeric probability that bone is located within the patch. Thresholding was used to determine at which probability will the patch be classified as bone or non-bone. The value for the threshold was selected by a validation process which calculates the value for the minimum probability that a bone is present with the use of the 9 validation images. 
+\\[1\baselineskip]
+While the model was able to make predictions without error, this does not indicate that the image is perfectly segmented. Recalling that superpixels are a cluster of pixels, this means that superpixels that have been classified as bone may contain pixels that are in fact non-bone. Table \ref{table:pixelacc} supports this as while the patch accuracies are all perfect, it can be seen that the image accuracies are still lacking. The testing phase looks at the output of the models prediction and works to improve the overall image segmentation accuracy. One way that this is done is by carefully selecting the multi-resolution approach by testing different resolution schemes to observe how the number of testing superpixels impact the accuracy and segmentation time. The second process is the use of a morphology operation to further refine the edges of the resulting segmentation. Various operations and associated structuring elements were all trialled in order to determine the best operation, shape and size. 
+\\[1\baselineskip]
+The incorporation of the results obtained from parameter searching and threshold validation with the integration of post-processing stage contributed to the over all performance of the proposed segmentation scheme.
+
+\section{Limitations}
+\label{sect:limit}
+The proposed method was able to produce quite accurate segmentation results, but are still encompassed with certain limitations. 
+\\[1\baselineskip]
+The segmentation scheme proposed only performs on 2D images due to a setback of not having a functional superpixel algorithm to be used on voxels. As MRIs are inherently used in 3D, this current segmentation is not very applicable for real world application. This brings up an avenue for future development in \ref{sect:future}. 
+\\[1\baselineskip]
+As noted earlier, a limitation to this segmentation solution is that the image accuracy is dependent on the size of the superpixel patches being classified. Perhaps alternative superpixel algorithms could be explored or implementation of another stage that can further process and classify the borders of the segmentation.
+\\[1\baselineskip]
+The labelled segmentations associated with the data were manually segmented. One of the motivations to produce an automated segmentation scheme was to mitigate human error. So therefore, if the model was taught on a manual segmentation that had incorrect segmentations, this could lead to erroneous segmentations in actual reality even though it may have learnt and segmented properly according to the inaccurate data supplied.  
+\\[1\baselineskip]
+Finally, the model produced is only applicable to hip joints. However, that is not to say that the segmentation scheme in general cannot be used for other applications. Segmentation of other anatomies could be possible with the proposed segmentation scheme if the model is trained specifically.
+
 \section{Future Work}
+\label{sect:future}
+This thesis project has proposed a segmentation scheme of hip joints for 2D slices of MRIs with the use of Random Forests and SLIC superpixels. While it proved to have relatively good performance, there are various aspects of the project that would benefit from further study and investigations. 
+\\[1\baselineskip]
+As mentioned in the \ref{sect:limit}, the segmentation scheme is only applicable to 2D slices of MRIs. The scheme would be more applicable if it were able to handle 3D images. Applying this segmentation scheme is possible by conducting the 2D process over all the slices which make up the 3D image. Furthermore, as the setback to 2D processing was because of the superpixel algorithm, investigations into usage of superpixels in 3D would be an area for development of the segmentation scheme.
+\\[1\baselineskip]
+The features that were extracted were not studied in depth throughout the duration of this thesis. Further analysis of the impact that certain features have on the segmentation scheme may enhance the testing time.  This analysis could include incorporation or exclusion of different features. The Random Forest is ideal for this as it supplies an estimation of the contribution of features to in the training phase.
+\\[1\baselineskip]
+Throughout the duration of the thesis project, only 30 images were able to be utilised in the training and testing phases. With background research, it had been suggested that Random Forests can be prone to overfitting. If all the images used were similar or were not arbitrary enough, there would be a possibility that the model devised is over-fitted and hence the good test segmentation results. This could be properly detected through testing with a more variety of test images.
+\\[1\baselineskip]
+As mentioned in \ref{sect:limit}, the application of the segmentation scheme to other anatomies should be investigated. This could be done by obtaining data on a variety of anatomies and conducting the same training, testing and parameter search process.
